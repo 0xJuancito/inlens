@@ -113,6 +113,14 @@
   position: relative;
 }
 
+.twitter {
+  color: #00acee;
+}
+
+.lens {
+  color: #00501e;
+}
+
 .ldsheart {
   top: -26px;
   right: -21px;

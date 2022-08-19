@@ -22,10 +22,9 @@
 }
 
 .footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
+  margin-left: 3px;
+  font-weight: 800;
+  text-decoration: underline;
 }
 
 .title a {
@@ -101,11 +100,6 @@
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
-}
-
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
 }
 
 @media (max-width: 600px) {

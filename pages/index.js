@@ -13,12 +13,11 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Who is in Lens?
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          ​Find your friends from Twitter in Lens Protocol 🌿
         </p>
 
         <div className={styles.grid}>
@@ -53,16 +52,8 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
+          <span role="img" aria-label="sheep">Built with 🌿 by</span>
+          <a href='https://www.lensfrens.xyz/juancito.lens' target="blank">juancito.lens</a>
       </footer>
     </div>
   )

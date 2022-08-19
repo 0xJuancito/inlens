@@ -2134,10 +2134,10 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-who-is-in-lens@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/who-is-in-lens/-/who-is-in-lens-1.0.2.tgz#fcf409edb056492dfd97ded8ce248f6c342c711d"
-  integrity sha512-5pH35M4gR++uETb8qdDlwQVtSSZaAj6MXc7ajUo0hE0Id86l1tgrCO+FngMBJZpkL3spfD2HRXDS1/gGTYFCQQ==
+who-is-in-lens@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/who-is-in-lens/-/who-is-in-lens-1.0.3.tgz#1df6add4742dbf32dc0322616e9a7a600c98127f"
+  integrity sha512-8bEZYx9amX0fetPWvRDLEu/qDBtDG2GXAan8pipSyvLFD2Qd3XNM6npyZUT4kEmZMi/lZi6q91WzmB2OgHyAhA==
   dependencies:
     dotenv "^16.0.1"
     ethers "^5.6.9"

@@ -14,9 +14,15 @@ const frens = [
 ];
 
 export default async function handler(
-  _req: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { username } = req.query;
+
+  if (!username) {
+    res.status(400).json({ error: "No username was provided" });
+  }
+
   try {
     await limiter.check(res, 5, "CACHE_TOKEN"); // 5 requests per minute
     res.status(200).json(frens);

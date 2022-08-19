@@ -67,7 +67,9 @@ export default function Home() {
 
     return (
       <div>
-        <div>Found {frens.length} frens in Lens!</div>
+        <div>
+          Found {frens.length} frens in Lens! {"🤎"}
+        </div>
         <ul>
           {frens.map((fren) => (
             <li key={fren.twitter}>
@@ -133,7 +135,7 @@ export default function Home() {
         </div>
         <div>
           {waiting === true
-            ? "Finding frens in Lens. Please wait a few seconds :)"
+            ? "Finding frens in Lens. It takes around 30 seconds :)"
             : ""}
         </div>
         <div>{!waiting && errorMessage}</div>

@@ -140,6 +140,7 @@ export default function Home() {
             ? "Finding frens in Lens. It takes around 15-20 seconds :)"
             : ""}
         </div>
+        <div>{waiting === true ? "Don't refresh the page! 🙏" : ""}</div>
         <div>{!waiting && errorMessage}</div>
         <div>{!waiting && frensList()}</div>
       </main>
@@ -150,6 +151,14 @@ export default function Home() {
         </span>
         <a href="https://www.lensfrens.xyz/juancito.lens" target="blank">
           juancito.lens
+        </a>
+        &nbsp; | &nbsp;
+        <a
+          href="https://github.com/juanscolari/who-is-in-lens"
+          target={"_blank"}
+          rel={"noreferrer"}
+        >
+          GitHub
         </a>
       </footer>
     </div>

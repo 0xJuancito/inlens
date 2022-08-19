@@ -77,6 +77,7 @@ export default function Home() {
                 className={styles.twitter}
                 href={twitterUrl(fren.twitter)}
                 target={"_blank"}
+                rel={"noreferrer"}
               >
                 @{fren.twitter}
               </a>
@@ -85,6 +86,7 @@ export default function Home() {
                 className={styles.lens}
                 href={lensUrl(fren.lens)}
                 target={"_blank"}
+                rel={"noreferrer"}
               >
                 {fren.lens}
               </a>

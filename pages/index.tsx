@@ -137,7 +137,7 @@ export default function Home() {
         </div>
         <div>
           {waiting === true
-            ? "Finding frens in Lens. It takes around 15-20 seconds :)"
+            ? "Finding frens in Lens. It takes around 10 seconds :)"
             : ""}
         </div>
         <div>{waiting === true ? "Don't refresh the page! 🙏" : ""}</div>

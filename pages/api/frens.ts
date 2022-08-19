@@ -11,6 +11,22 @@ const frens = [
     twitter: "StaniKulechov",
     lens: "stani.lens",
   },
+  {
+    twitter: "StaniKulechov",
+    lens: "stani.lens",
+  },
+  {
+    twitter: "StaniKulechov",
+    lens: "stani.lens",
+  },
+  {
+    twitter: "StaniKulechov",
+    lens: "stani.lens",
+  },
+  {
+    twitter: "StaniKulechov",
+    lens: "stani.lens",
+  },
 ];
 
 export default async function handler(

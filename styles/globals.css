@@ -14,3 +14,36 @@ a {
 * {
   box-sizing: border-box;
 }
+
+input {
+  height: 40px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  margin-bottom: 2.5rem;
+  width: 200px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+button {
+  border-radius: 4px;
+  height: 40px;
+  padding: 0.5rem 1rem;
+  font-size: 16px;
+  border: none;
+  transition: 0.25s all ease;
+  background-color: #eaeaea;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 10px;
+}
+
+button:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+}

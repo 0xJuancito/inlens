@@ -114,6 +114,43 @@ export default function Home() {
           content="​Find your friends from Twitter in Lens Protocol 🌿"
         />
         <link rel="icon" href="/favicon.ico" />
+
+        {/* <!-- Primary Meta Tags --> */}
+        <title>Who is in Lens?</title>
+        <meta name="title" content="Who is in Lens?" />
+        <meta
+          name="description"
+          content="​Find your friends from Twitter in Lens Protocol"
+        />
+
+        {/* <!-- Open Graph / Facebook --> */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://who-is-in-lens.vercel.app/" />
+        <meta property="og:title" content="Who is in Lens?" />
+        <meta
+          property="og:description"
+          content="​Find your friends from Twitter in Lens Protocol"
+        />
+        <meta
+          property="og:image"
+          content="https://who-is-in-lens.vercel.app/who-is-in-lens.png"
+        />
+
+        {/* <!-- Twitter --> */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta
+          property="twitter:url"
+          content="https://who-is-in-lens.vercel.app/"
+        />
+        <meta property="twitter:title" content="Who is in Lens?" />
+        <meta
+          property="twitter:description"
+          content="​Find your friends from Twitter in Lens Protocol"
+        />
+        <meta
+          property="twitter:image"
+          content="https://who-is-in-lens.vercel.app/who-is-in-lens.png"
+        />
       </Head>
 
       <main className={styles.main}>

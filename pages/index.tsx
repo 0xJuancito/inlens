@@ -63,7 +63,8 @@ export default function Home() {
     }
 
     const twitterUrl = (handle: string) => `https://twitter.com/${handle}`;
-    const lensUrl = (handle: string) => `https://lensfrens.xyz/${handle}`;
+    const lensUrl = (handle: string) =>
+      `https://lensfrens.xyz/${handle.toLowerCase()}`;
 
     return (
       <div>

@@ -126,7 +126,7 @@ export default function Home() {
 
         {/* <!-- Open Graph / Facebook --> */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://who-is-in-lens.vercel.app/" />
+        <meta property="og:url" content="https://inlens.xyz/" />
         <meta property="og:title" content="Who is in Lens?" />
         <meta
           property="og:description"
@@ -134,14 +134,14 @@ export default function Home() {
         />
         <meta
           property="og:image"
-          content="https://who-is-in-lens.vercel.app/who-is-in-lens.png"
+          content="https://inlens.xyz/inlens.png"
         />
 
         {/* <!-- Twitter --> */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:url"
-          content="https://who-is-in-lens.vercel.app/"
+          content="https://inlens.xyz/"
         />
         <meta property="twitter:title" content="Who is in Lens?" />
         <meta
@@ -150,7 +150,7 @@ export default function Home() {
         />
         <meta
           property="twitter:image"
-          content="https://who-is-in-lens.vercel.app/who-is-in-lens.png"
+          content="https://inlens.xyz/inlens.png"
         />
       </Head>
 

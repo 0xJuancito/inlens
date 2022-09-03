@@ -40,6 +40,13 @@ button {
   font-weight: 600;
   color: #111;
   margin: 0 10px;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -o-user-select: none;
+  -moz-user-select: none;
 }
 
 button:hover {

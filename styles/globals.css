@@ -21,8 +21,6 @@ input {
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  margin-bottom: 2.5rem;
-  width: 200px;
 }
 
 input:focus {

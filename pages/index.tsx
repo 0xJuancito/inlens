@@ -67,7 +67,7 @@ export default function Home() {
       `https://lensfrens.xyz/${handle.toLowerCase()}`;
 
     return (
-      <div>
+      <div className={styles.frensContainer}>
         <div>
           Found {frens.length} frens in Lens! {"🤎"}
         </div>
@@ -132,17 +132,11 @@ export default function Home() {
           property="og:description"
           content="​Find your friends from Twitter in Lens Protocol"
         />
-        <meta
-          property="og:image"
-          content="https://inlens.xyz/inlens.png"
-        />
+        <meta property="og:image" content="https://inlens.xyz/inlens.png" />
 
         {/* <!-- Twitter --> */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta
-          property="twitter:url"
-          content="https://inlens.xyz/"
-        />
+        <meta property="twitter:url" content="https://inlens.xyz/" />
         <meta property="twitter:title" content="Who is in Lens?" />
         <meta
           property="twitter:description"
@@ -156,29 +150,29 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Who is in Lens?</h1>
-
         <p className={styles.description}>
           ​Find your friends from Twitter in Lens Protocol 🌿
         </p>
-
         <div className={styles.inputContainer}>
-          <input
-            type="text"
-            name="twitterInput"
-            ref={twitterInput}
-            value={inputValue}
-            onChange={onChangeHandler}
-            placeholder="@LensProtocol"
-          ></input>
+          <div className={styles.twitterInputContainer}>
+            <span className={styles.twitterInputAt}>@</span>
+            <input
+              type="text"
+              name="twitterInput"
+              className={styles.twitterInput}
+              ref={twitterInput}
+              value={inputValue}
+              onChange={onChangeHandler}
+              placeholder="TwitterHandle"
+            ></input>
+          </div>
           <button onClick={() => makeRequest()}>Find Frens!</button>
-          {waiting === true ? renderHeart() : ""}
         </div>
-        <div>
-          {waiting === true
-            ? "Finding frens in Lens. It takes around 10 seconds :)"
-            : ""}
+        <div className={styles.pleaseWait}>
+          {waiting === true ? "Finding frens in Lens. Please wait :)" : ""}
         </div>
-        <div>{waiting === true ? "Don't refresh the page! 🙏" : ""}</div>
+        <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
+        {waiting === true ? renderHeart() : ""}
         <div>{!waiting && errorMessage}</div>
         <div>{!waiting && frensList()}</div>
       </main>

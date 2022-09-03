@@ -110,7 +110,35 @@
 }
 
 .inputContainer {
-  position: relative;
+  display: flex;
+}
+
+.inputContainer button {
+  min-width: 110px;
+}
+
+.twitterInputContainer {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.twitterInputAt {
+  height: 40px;
+  width: 40px;
+  background-color: #e9ecef;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  line-height: 37px;
+  border-radius: 0.25rem 0 0 0.25rem;
+  border: 1px solid #ccc;
+  border-width: 1px 0 1px 1px;
+  box-sizing: border-box;
+}
+
+.twitterInput {
+  border-radius: 0 0.25rem 0.25rem 0;
+  max-width: 200px;
 }
 
 .twitter {
@@ -121,14 +149,18 @@
   color: #00501e;
 }
 
+.pleaseWait {
+  margin-bottom: 5px;
+}
+
+.frensContainer {
+  text-align: center;
+}
+
 .ldsheart {
-  top: -26px;
-  right: -21px;
-  scale: 0.7;
-  display: inline-block;
-  position: absolute;
   width: 40px;
   height: 40px;
+  margin-left: -20px;
   transform: rotate(45deg);
   transform-origin: 40px 40px;
 }

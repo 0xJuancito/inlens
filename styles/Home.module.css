@@ -115,6 +115,7 @@
 
 .inputContainer button {
   min-width: 110px;
+  margin-right: 0;
 }
 
 .twitterInputContainer {

@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import Head from "next/head";
+import Image from "next/image";
 import { useRef, useState, useEffect, SetStateAction } from "react";
 import styles from "../styles/Home.module.css";
 
@@ -107,92 +109,110 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Who is in Lens?</title>
-        <meta
-          name="description"
-          content="​Find your friends from Twitter in Lens Protocol 🌿"
-        />
-        <link rel="icon" href="/favicon.ico" />
+    <div>
+      <header>
+        <nav>
+          <button className={styles.signIn}>
+            <Image
+              height="40"
+              width="40"
+              src="/lens.svg"
+              alt="Lens Logo"
+            ></Image>
+            <span>Login</span>
+          </button>
+        </nav>
+      </header>
+      <div className={styles.container}>
+        <Head>
+          <title>Who is in Lens?</title>
+          <meta
+            name="description"
+            content="​Find your friends from Twitter in Lens Protocol 🌿"
+          />
+          <link rel="icon" href="/favicon.ico" />
 
-        {/* <!-- Primary Meta Tags --> */}
-        <title>Who is in Lens?</title>
-        <meta name="title" content="Who is in Lens?" />
-        <meta
-          name="description"
-          content="​Find your friends from Twitter in Lens Protocol"
-        />
+          {/* <!-- Primary Meta Tags --> */}
+          <title>Who is in Lens?</title>
+          <meta name="title" content="Who is in Lens?" />
+          <meta
+            name="description"
+            content="​Find your friends from Twitter in Lens Protocol"
+          />
 
-        {/* <!-- Open Graph / Facebook --> */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://inlens.xyz/" />
-        <meta property="og:title" content="Who is in Lens?" />
-        <meta
-          property="og:description"
-          content="​Find your friends from Twitter in Lens Protocol"
-        />
-        <meta property="og:image" content="https://inlens.xyz/inlens.png" />
+          {/* <!-- Open Graph / Facebook --> */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://inlens.xyz/" />
+          <meta property="og:title" content="Who is in Lens?" />
+          <meta
+            property="og:description"
+            content="​Find your friends from Twitter in Lens Protocol"
+          />
+          <meta property="og:image" content="https://inlens.xyz/inlens.png" />
 
-        {/* <!-- Twitter --> */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://inlens.xyz/" />
-        <meta property="twitter:title" content="Who is in Lens?" />
-        <meta
-          property="twitter:description"
-          content="​Find your friends from Twitter in Lens Protocol"
-        />
-        <meta
-          property="twitter:image"
-          content="https://inlens.xyz/inlens.png"
-        />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>Who is in Lens?</h1>
-        <p className={styles.description}>
-          ​Find your friends from Twitter in Lens Protocol 🌿
-        </p>
-        <div className={styles.inputContainer}>
-          <div className={styles.twitterInputContainer}>
-            <span className={styles.twitterInputAt}>@</span>
-            <input
-              type="text"
-              name="twitterInput"
-              className={styles.twitterInput}
-              ref={twitterInput}
-              value={inputValue}
-              onChange={onChangeHandler}
-              placeholder="TwitterHandle"
-            ></input>
+          {/* <!-- Twitter --> */}
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content="https://inlens.xyz/" />
+          <meta property="twitter:title" content="Who is in Lens?" />
+          <meta
+            property="twitter:description"
+            content="​Find your friends from Twitter in Lens Protocol"
+          />
+          <meta
+            property="twitter:image"
+            content="https://inlens.xyz/inlens.png"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&amp;display=swap"
+            rel="stylesheet"
+          ></link>
+        </Head>
+        <main className={styles.main}>
+          <h1 className={styles.title}>WHO IS IN LENS?</h1>
+          <p className={styles.description}>
+            ​Find your friends from Twitter in Lens Protocol 🌿
+          </p>
+          <div className={styles.inputContainer}>
+            <div className={styles.twitterInputContainer}>
+              <span className={styles.twitterInputAt}>@</span>
+              <input
+                type="text"
+                name="twitterInput"
+                className={styles.twitterInput}
+                ref={twitterInput}
+                value={inputValue}
+                onChange={onChangeHandler}
+                placeholder="TwitterHandle"
+              ></input>
+            </div>
+            <button onClick={() => makeRequest()}>Find Frens!</button>
           </div>
-          <button onClick={() => makeRequest()}>Find Frens!</button>
-        </div>
-        <div className={styles.pleaseWait}>
-          {waiting === true ? "Finding frens in Lens. Please wait :)" : ""}
-        </div>
-        <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
-        {waiting === true ? renderHeart() : ""}
-        <div>{!waiting && errorMessage}</div>
-        <div>{!waiting && frensList()}</div>
-      </main>
+          <div className={styles.pleaseWait}>
+            {waiting === true ? "Finding frens in Lens. Please wait :)" : ""}
+          </div>
+          <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
+          {waiting === true ? renderHeart() : ""}
+          <div>{!waiting && errorMessage}</div>
+          <div>{!waiting && frensList()}</div>
+        </main>
 
-      <footer className={styles.footer}>
-        <span role="img" aria-label="sheep">
-          Built with 🌿 by
-        </span>
-        <a href="https://www.lensfrens.xyz/juancito.lens" target="blank">
-          juancito.lens
-        </a>
-        &nbsp; | &nbsp;
-        <a
-          href="https://github.com/juanscolari/who-is-in-lens"
-          target={"_blank"}
-          rel={"noreferrer"}
-        >
-          GitHub
-        </a>
-      </footer>
+        <footer className={styles.footer}>
+          <span role="img" aria-label="sheep">
+            Built with 🌿 by
+          </span>
+          <a href="https://www.lensfrens.xyz/juancito.lens" target="blank">
+            juancito.lens
+          </a>
+          &nbsp; | &nbsp;
+          <a
+            href="https://github.com/juanscolari/who-is-in-lens"
+            target={"_blank"}
+            rel={"noreferrer"}
+          >
+            GitHub
+          </a>
+        </footer>
+      </div>
     </div>
   );
 }

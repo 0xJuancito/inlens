@@ -134,6 +134,16 @@
   border: 1px solid #ccc;
   border-width: 1px 0 1px 1px;
   box-sizing: border-box;
+  cursor: default;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+
+  pointer-events:none;
 }
 
 .twitterInput {
@@ -156,6 +166,13 @@
 
 .frensContainer {
   text-align: center;
+}
+
+
+.signIn {
+  display: flex;
+  align-items: center;
+  padding-left: 0.3rem;
 }
 
 .ldsheart {

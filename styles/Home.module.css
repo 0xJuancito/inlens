@@ -1,9 +1,12 @@
 .container {
   padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* TODO change to 90vh */
 }
 
 .main {
-  min-height: 90vh;
+  min-height: 80vh;
   padding: 4rem 0;
   flex: 1;
   display: flex;
@@ -19,6 +22,7 @@
   border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+  max-height: 86px;
 }
 
 .footer a {
@@ -169,11 +173,28 @@
   text-align: center;
 }
 
-
 .signIn {
   display: flex;
   align-items: center;
   padding-left: 0.3rem;
+  min-width: 100px;
+}
+
+.signIn[disabled] {
+  background-color: rgba(171, 254, 44, 0.6);
+}
+
+.inlensText {
+  font-family: "Space Grotesk";
+  font-size: 30px;
+  font-weight: 800;
+  margin-left: 20px;
+  cursor: default;
+}
+
+.inlensContainer {
+  display: flex;
+  align-items: center;
 }
 
 .ldsheart {
@@ -227,5 +248,34 @@
   }
   100% {
     transform: scale(0.9);
+  }
+}
+
+.ldsring {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  scale: 25%;
+  margin-bottom: 12px;
+  margin-left: -6px;
+  margin-right: 6px;
+}
+.ldsring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #212322;
+  border-color: #212322 transparent #212322 transparent;
+  animation: ldsring 1.2s linear infinite;
+}
+@keyframes ldsring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

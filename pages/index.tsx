@@ -3,13 +3,27 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState, useEffect, SetStateAction } from "react";
 import styles from "../styles/Home.module.css";
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
+import { login } from "./lib/login";
+import { getDefaultProfile } from "./lib/get-default-profile";
+import ClaimPopup from "../components/popup";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
+
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [lensHandle, setLensHandle] = useState(false);
+
   const [frens, setFrens] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
+  const [instance, setInstance] = useState<any>();
+
   const twitterInput = useRef(null);
+  const claimPopup = useRef(null);
 
   const onChangeHandler = (event: {
     target: { value: SetStateAction<string> };
@@ -18,8 +32,43 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const newModal = new Web3Modal({
+      // cacheProvider: true,
+      providerOptions: {},
+      network: "matic",
+    });
+    setWeb3Modal(newModal);
     if (twitterInput.current) twitterInput.current.focus();
   }, [twitterInput]);
+
+  const connect = async () => {
+    if (loggingIn) {
+      return;
+    }
+    try {
+      setLoggingIn(true);
+      const newInstance = await web3Modal.connect();
+      setInstance(newInstance);
+
+      const provider = new ethers.providers.Web3Provider(newInstance);
+      const signer = provider.getSigner();
+
+      const accessToken = await login(signer);
+
+      const response = await getDefaultProfile();
+      if (!response.defaultProfile) {
+        claimPopup.current.open();
+        setLoggingIn(false);
+        return;
+      }
+
+      setLensHandle(response.defaultProfile.handle);
+      setLoggedIn(true);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoggingIn(false);
+  };
 
   const makeRequest = async () => {
     if (waiting) {
@@ -108,19 +157,63 @@ export default function Home() {
     );
   };
 
+  const renderLoading = () => {
+    if (!loggingIn) {
+      return "";
+    }
+    return (
+      <span className={styles.ldsring}>
+        <div></div>
+      </span>
+    );
+  };
+
+  const renderLoginImage = () => {
+    if (loggingIn) {
+      return "";
+    }
+    return (
+      <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
+    );
+  };
+
+  const renderLogin = () => {
+    return (
+      <button
+        className={styles.signIn}
+        onClick={() => connect()}
+        disabled={loggingIn}
+      >
+        {renderLoginImage()}
+        {renderLoading()}
+        <span>Login</span>
+      </button>
+    );
+  };
+
+  const renderLoggedIn = () => {
+    return (
+      <button className={styles.signIn} onClick={() => connect()}>
+        <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
+        <span>{lensHandle}</span>
+      </button>
+    );
+  };
+
   return (
     <div>
       <header>
         <nav>
-          <button className={styles.signIn}>
+          <div className={styles.inlensContainer}>
             <Image
-              height="40"
-              width="40"
-              src="/lens.svg"
-              alt="Lens Logo"
+              height="50"
+              width="50"
+              src="/birdie.svg"
+              alt="inlens logo"
             ></Image>
-            <span>Login</span>
-          </button>
+            <span className={styles.inlensText}>inlens</span>
+          </div>
+          {loggedIn ? renderLoggedIn() : renderLogin()}
         </nav>
       </header>
       <div className={styles.container}>
@@ -213,6 +306,7 @@ export default function Home() {
           </a>
         </footer>
       </div>
+      <ClaimPopup ref={claimPopup}></ClaimPopup>
     </div>
   );
 }

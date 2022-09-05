@@ -2,7 +2,7 @@
   padding: 0 2rem;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* TODO change to 90vh */
+  min-height: 90vh;
 }
 
 .main {
@@ -174,7 +174,7 @@
 }
 
 .signIn {
-  display: flex;
+  display: none;
   align-items: center;
   padding-left: 0.3rem;
   min-width: 100px;

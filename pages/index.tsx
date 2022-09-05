@@ -257,7 +257,7 @@ export default function Home() {
           />
           <link
             href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&amp;display=swap"
-            rel="stylesheet"
+            rel="preload"
           ></link>
         </Head>
         <main className={styles.main}>

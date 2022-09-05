@@ -5,8 +5,8 @@ import { useRef, useState, useEffect, SetStateAction } from "react";
 import styles from "../styles/Home.module.css";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import { login } from "./lib/login";
-import { getDefaultProfile } from "./lib/get-default-profile";
+import { login } from "../lib/login";
+import { getDefaultProfile } from "../lib/get-default-profile";
 import ClaimPopup from "../components/popup";
 
 export default function Home() {

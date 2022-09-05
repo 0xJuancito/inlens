@@ -116,6 +116,7 @@ export default function Home() {
       if (!response.defaultProfile) {
         claimPopup.current.open();
         setLoggingIn(false);
+        setAuthenticationToken(null);
         return;
       }
 

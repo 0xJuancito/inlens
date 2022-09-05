@@ -8,13 +8,17 @@ import Web3Modal from "web3modal";
 import { login } from "../lib/login";
 import { getDefaultProfile } from "../lib/get-default-profile";
 import ClaimPopup from "../components/popup";
+import { setAuthenticationToken } from "../lib/state";
+import jwt from "jsonwebtoken";
+import { setAddress, setSigner } from "../lib/ethers.service";
+import { refresh } from "../lib/refresh";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
 
   const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [lensHandle, setLensHandle] = useState(false);
+  const [lensHandle, setLensHandle] = useState("");
 
   const [frens, setFrens] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -39,7 +43,58 @@ export default function Home() {
     });
     setWeb3Modal(newModal);
     if (twitterInput.current) twitterInput.current.focus();
-  }, [twitterInput]);
+  }, []);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const handle = localStorage.getItem("lens_handle");
+      let accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      if (!handle || !accessToken || !refreshToken) {
+        clearProfile();
+        return;
+      }
+
+      try {
+        const decodedAccess = jwt.decode(accessToken, { json: true });
+        const decodedRefresh = jwt.decode(refreshToken, { json: true });
+
+        if (Date.now() >= decodedRefresh.exp * 1000) {
+          clearProfile();
+          return;
+        }
+
+        if (Date.now() >= decodedAccess.exp * 1000) {
+          const newTokens = await refresh(decodedRefresh.id, refreshToken);
+          storeProfile(handle, newTokens);
+          accessToken = newTokens.accessToken;
+        }
+        setAddress(decodedRefresh.id);
+      } catch (error) {
+        clearProfile();
+        console.error(error);
+        return;
+      }
+
+      setLensHandle(handle);
+      setLoggedIn(true);
+      setAuthenticationToken(accessToken);
+    };
+    loadProfile();
+  }, []);
+
+  const clearProfile = () => {
+    localStorage.removeItem("lens_handle");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+  };
+
+  const storeProfile = (handle: string, authorization: any) => {
+    localStorage.setItem("lens_handle", handle);
+    localStorage.setItem("access_token", authorization.accessToken);
+    localStorage.setItem("refresh_token", authorization.refreshToken);
+  };
 
   const connect = async () => {
     if (loggingIn) {
@@ -52,8 +107,10 @@ export default function Home() {
 
       const provider = new ethers.providers.Web3Provider(newInstance);
       const signer = provider.getSigner();
+      setSigner(signer);
 
-      const accessToken = await login(signer);
+      const address = await signer.getAddress();
+      const accessToken = await login(address);
 
       const response = await getDefaultProfile();
       if (!response.defaultProfile) {
@@ -61,6 +118,8 @@ export default function Home() {
         setLoggingIn(false);
         return;
       }
+
+      storeProfile(response.defaultProfile.handle, accessToken.authenticate);
 
       setLensHandle(response.defaultProfile.handle);
       setLoggedIn(true);
@@ -191,9 +250,13 @@ export default function Home() {
     );
   };
 
+  const displayLoggedInMenu = async () => {
+    console.log(await getDefaultProfile());
+  };
+
   const renderLoggedIn = () => {
     return (
-      <button className={styles.signIn} onClick={() => connect()}>
+      <button className={styles.signIn} onClick={() => displayLoggedInMenu()}>
         <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
         <span>{lensHandle}</span>
       </button>

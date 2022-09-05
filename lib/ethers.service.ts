@@ -13,6 +13,10 @@ export const setSigner = async (_signer: ethers.providers.JsonRpcSigner) => {
   address = await signer.getAddress();
 };
 
+export const setAddress = async (_address: string) => {
+  address = _address;
+};
+
 export const getSigner = () => {
   return signer;
 };

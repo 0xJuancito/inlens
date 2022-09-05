@@ -11,6 +11,7 @@
     "cross-fetch": "^3.1.5",
     "ethers": "^5.7.0",
     "graphql": "^16.6.0",
+    "jsonwebtoken": "^8.5.1",
     "lru-cache": "^7.12.0",
     "next": "12.1.4",
     "omit-deep": "^0.3.0",
@@ -21,6 +22,7 @@
     "who-is-in-lens": "^1.0.8"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.7.7",
     "@types/react": "18.0.1",
     "@types/react-dom": "^18.0.6",

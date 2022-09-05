@@ -43,9 +43,7 @@ const authenticate = (address: string, signature: string) => {
   });
 };
 
-export const login = async (signer: ethers.providers.JsonRpcSigner) => {
-  await setSigner(signer);
-  const address = await signer.getAddress();
+export const login = async (address: string) => {
   if (getAuthenticationToken()) {
     console.log("login: already logged in");
     return;

@@ -206,8 +206,8 @@ export default function Home() {
         <nav>
           <div className={styles.inlensContainer}>
             <Image
-              height="50"
-              width="50"
+              height="48"
+              width="48"
               src="/birdie.svg"
               alt="inlens logo"
             ></Image>

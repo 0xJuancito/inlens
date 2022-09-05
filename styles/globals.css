@@ -112,3 +112,7 @@ h1 {
 [data-popup='tooltip'].popup-overlay {
   background: transparent;
 }
+
+.szh-menu-container {
+  position: absolute !important;
+}

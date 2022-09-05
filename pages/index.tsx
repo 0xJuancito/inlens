@@ -12,6 +12,7 @@ import { setAuthenticationToken } from "../lib/state";
 import jwt from "jsonwebtoken";
 import { setAddress, setSigner } from "../lib/ethers.service";
 import { refresh } from "../lib/refresh";
+import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
@@ -251,16 +252,33 @@ export default function Home() {
     );
   };
 
-  const displayLoggedInMenu = async () => {
-    console.log(await getDefaultProfile());
+  const logout = async () => {
+    setLoggedIn(false);
+    setAddress(null);
+    setAuthenticationToken(null);
+    clearProfile();
   };
 
   const renderLoggedIn = () => {
     return (
-      <button className={styles.signIn} onClick={() => displayLoggedInMenu()}>
-        <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
-        <span>{lensHandle}</span>
-      </button>
+      <Menu
+        align="end"
+        menuButton={
+          <MenuButton className={styles.signIn}>
+            <Image
+              height="40"
+              width="40"
+              src="/lens.svg"
+              alt="Lens Logo"
+            ></Image>
+            <span>{lensHandle}</span>
+          </MenuButton>
+        }
+      >
+        <MenuItem className={styles.logout} onClick={() => logout()}>
+          Logout
+        </MenuItem>
+      </Menu>
     );
   };
 

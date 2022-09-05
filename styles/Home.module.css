@@ -279,3 +279,16 @@
     transform: rotate(360deg);
   }
 }
+
+.logout {
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 0.25rem;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.logout:hover {
+  background-color: #fafafa;
+}

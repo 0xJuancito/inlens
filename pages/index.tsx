@@ -13,6 +13,7 @@ import jwt from "jsonwebtoken";
 import { setAddress, setSigner } from "../lib/ethers.service";
 import { refresh } from "../lib/refresh";
 import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
+import { findFrens, TooManyRequestsError } from "../lib/find-frens";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
@@ -131,42 +132,43 @@ export default function Home() {
     setLoggingIn(false);
   };
 
-  const makeRequest = async () => {
+  const findFrensRequest = async () => {
     if (waiting) {
       return;
     }
     setWaiting(true);
 
-    const parsedValue = inputValue.replaceAll("@", "");
-
-    if (!parsedValue) {
+    const twitterHandle = inputValue.replaceAll("@", "");
+    if (!twitterHandle) {
       setWaiting(false);
       return;
     }
+
+    setFrens([]);
+    setErrorMessage("");
+
     try {
-      const res = await fetch(`/api/frens?username=${parsedValue}`);
+      let accessToken = localStorage.getItem("access_token");
+      const decoded = jwt.decode(accessToken, { json: true });
+      const address = decoded?.id;
 
-      setFrens([]);
-      setErrorMessage("");
+      const newFrens = await findFrens(twitterHandle, address);
 
-      if (res.status === 200) {
-        const newFrens = await res.json();
-        if (newFrens.length) {
-          setFrens(newFrens);
-        } else {
-          setErrorMessage("No friend was found :(");
-        }
+      if (newFrens.length) {
+        setFrens(newFrens);
       } else {
-        setErrorMessage(
-          "Too many requests. Please try again in a few minutes ⌛️"
-        );
+        setErrorMessage("No friend was found :(");
       }
-
-      setWaiting(false);
     } catch (err) {
+      if (err instanceof TooManyRequestsError) {
+        setErrorMessage(err.message);
+      }
+      setErrorMessage(
+        "Too many requests. Please try again in a few minutes ⌛️"
+      );
       console.log(err);
-      setWaiting(false);
     }
+    setWaiting(false);
   };
 
   const frensList = () => {
@@ -178,6 +180,21 @@ export default function Home() {
     const lensUrl = (handle: string) =>
       `https://lensfrens.xyz/${handle.toLowerCase()}`;
 
+    const renderFollowing = (fren) => {
+      const follows = fren.lens?.follows;
+      if (follows === undefined) {
+        return "";
+      } else if (follows === true) {
+        return <button className={styles.following}>{"✓ Following"}</button>;
+      }
+      return (
+        <button className={styles.follow}>
+          <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
+          {"Follow"}
+        </button>
+      );
+    };
+
     return (
       <div className={styles.frensContainer}>
         <div>
@@ -185,24 +202,25 @@ export default function Home() {
         </div>
         <ul>
           {frens.map((fren) => (
-            <li key={fren.twitter}>
+            <li key={fren.twitter.handle}>
               <a
                 className={styles.twitter}
-                href={twitterUrl(fren.twitter)}
+                href={twitterUrl(fren.twitter.handle)}
                 target={"_blank"}
                 rel={"noreferrer"}
               >
-                @{fren.twitter}
+                @{fren.twitter.handle}
               </a>
               <a
                 className={styles.lens}
-                href={lensUrl(fren.lens)}
+                href={lensUrl(fren.lens.handle)}
                 target={"_blank"}
                 rel={"noreferrer"}
               >
                 {"🌿 "}
-                {fren.lens}
+                {fren.lens.handle}
               </a>
+              {renderFollowing(fren)}
             </li>
           ))}
         </ul>
@@ -360,7 +378,7 @@ export default function Home() {
                 placeholder="TwitterHandle"
               ></input>
             </div>
-            <button onClick={() => makeRequest()}>Find Frens!</button>
+            <button onClick={() => findFrensRequest()}>Find Frens!</button>
           </div>
           <div className={styles.pleaseWait}>
             {waiting === true ? "Finding frens in Lens. Please wait :)" : ""}

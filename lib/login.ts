@@ -43,7 +43,12 @@ const authenticate = (address: string, signature: string) => {
   });
 };
 
-export const login = async (address: string) => {
+export const login = async (address?: string) => {
+  if (!address) {
+    console.log("login: no address provided");
+    return;
+  }
+
   if (getAuthenticationToken()) {
     console.log("login: already logged in");
     return;

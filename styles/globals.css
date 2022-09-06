@@ -29,10 +29,10 @@ input:focus {
 }
 
 button {
+  font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
   border-radius: 0.5rem;
   height: 40px;
   padding: 0.5rem 1rem;
-  font-size: 16px;
   border: none;
   transition: 0.25s all ease;
   background-color: #abfe2c;

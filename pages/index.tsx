@@ -194,13 +194,13 @@ export default function Home() {
               >
                 @{fren.twitter}
               </a>
-              {"=>"} {" 🌿"}
               <a
                 className={styles.lens}
                 href={lensUrl(fren.lens)}
                 target={"_blank"}
                 rel={"noreferrer"}
               >
+                {"🌿 "}
                 {fren.lens}
               </a>
             </li>

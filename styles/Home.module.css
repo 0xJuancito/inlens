@@ -159,10 +159,12 @@
 
 .twitter {
   color: #00acee;
+  flex: 1;
 }
 
 .lens {
   color: #00501e;
+  flex: 1;
 }
 
 .pleaseWait {
@@ -171,6 +173,21 @@
 
 .frensContainer {
   text-align: center;
+}
+
+.frensContainer li {
+  border: 1px solid #eaeaea;
+  border-radius: 0.25rem;
+  padding: 10px;
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  min-width: 360px;
+}
+
+.frensContainer button {
+  margin: 0;
 }
 
 .signIn {

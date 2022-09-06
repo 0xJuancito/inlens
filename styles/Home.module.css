@@ -120,6 +120,8 @@
 .inputContainer button {
   min-width: 110px;
   margin-right: 0;
+  background-color: #d3b6ff;
+  color: #fff;
 }
 
 .twitterInputContainer {

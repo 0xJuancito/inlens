@@ -14,6 +14,10 @@ import { setAddress, setSigner } from "../lib/ethers.service";
 import { refresh } from "../lib/refresh";
 import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
 import { findFrens, TooManyRequestsError } from "../lib/find-frens";
+import { freeFollow } from "../lib/follow";
+import { ReactNotifications } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
+import { Store } from "react-notifications-component";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
@@ -96,6 +100,63 @@ export default function Home() {
     localStorage.setItem("lens_handle", handle);
     localStorage.setItem("access_token", authorization.accessToken);
     localStorage.setItem("refresh_token", authorization.refreshToken);
+  };
+
+  const checkProvider = async () => {};
+
+  const followRequest = async (id: string) => {
+    const newFrens = [...frens];
+    const fren = newFrens.find((fren) => fren.lens.id === id);
+    if (fren.lens.follows) {
+      return;
+    }
+
+    fren.lens.follows = true;
+    setFrens(newFrens);
+
+    try {
+      const newInstance = await web3Modal.connect();
+      setInstance(newInstance);
+
+      const provider = new ethers.providers.Web3Provider(newInstance);
+      const signer = provider.getSigner();
+      setSigner(signer);
+      await freeFollow(id);
+
+      Store.addNotification({
+        title: "Transaction sent!",
+        message: "You will see the update in a few seconds!",
+        type: "success",
+        insert: "bottom",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+    } catch (err) {
+      Store.addNotification({
+        title: "There was an error",
+        message: "Please try again in a few seconds 🙏",
+        type: "danger",
+        insert: "bottom",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
+
+      const newFrens = [...frens];
+      const fren = newFrens.find((fren) => fren.lens.id === id);
+      fren.lens.follows = false;
+      setFrens(newFrens);
+      console.error(err);
+    }
   };
 
   const connect = async () => {
@@ -188,7 +249,10 @@ export default function Home() {
         return <button className={styles.following}>{"✓ Following"}</button>;
       }
       return (
-        <button className={styles.follow}>
+        <button
+          className={styles.follow}
+          onClick={() => followRequest(fren.lens.id)}
+        >
           <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
           {"Follow"}
         </button>
@@ -302,6 +366,7 @@ export default function Home() {
 
   return (
     <div>
+      <ReactNotifications />
       <header>
         <nav>
           <div className={styles.inlensContainer}>

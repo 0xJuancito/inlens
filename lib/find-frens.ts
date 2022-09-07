@@ -43,7 +43,7 @@ export const findFrens = async (
     // First get Lens profile
     const lensIdsChunks = sliceIntoChunks(handleIds, CHUNK_SIZE);
     const profilesPromises = lensIdsChunks.map((chunk) =>
-      profiles({ handles: chunk, limit: CHUNK_SIZE })
+      profiles({ handles: chunk })
     );
     const profilesReponse = await Promise.all(profilesPromises);
     const lensProfiles = profilesReponse.flatMap(

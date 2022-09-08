@@ -30,13 +30,37 @@ export type Fren = {
 };
 
 export class TooManyRequestsError extends Error {}
+const CHUNK_SIZE = 50;
+
+export const modifyFollows = async (
+  address: string,
+  newFrens: Fren[]
+): Promise<any> => {
+  let followsArray = [];
+  const flatProfilesChunks = sliceIntoChunks(newFrens, CHUNK_SIZE);
+  const followPromises = flatProfilesChunks.map((chunk) =>
+    doesFollow(
+      address,
+      chunk.map((item) => item.lens.id)
+    )
+  );
+  const doesFollowResult = await Promise.all(followPromises);
+  followsArray = doesFollowResult.flatMap((array) => array.doesFollow);
+  console.log(followsArray);
+
+  // Add Lens follow data to the new frens
+  newFrens.forEach((fren) => {
+    const lensFren = followsArray.find(
+      (follows) => follows.profileId.toLowerCase() === fren.lens.id
+    );
+    fren.lens.follows = lensFren?.follows;
+  });
+};
 
 export const findFrens = async (
   twitterHandle: string,
   address?: string
 ): Promise<Fren[]> => {
-  const CHUNK_SIZE = 50;
-
   const res = await fetch(`/api/frens?username=${twitterHandle}`);
 
   if (res.status === 200) {
@@ -50,7 +74,7 @@ export const findFrens = async (
       fren.lens.handle.toLowerCase()
     );
 
-    const newFrens: Fren[] = filteredFrens.map((fren) => ({
+    let newFrens: Fren[] = filteredFrens.map((fren) => ({
       twitter: {
         handle: fren.twitter.handle,
         name: fren.twitter.name,
@@ -82,27 +106,11 @@ export const findFrens = async (
       fren.lens.id = lensFren?.id.toLowerCase();
     });
 
-    // Then find if the user is following them
-    let followsArray = [];
-    if (address) {
-      const flatProfilesChunks = sliceIntoChunks(lensProfiles, CHUNK_SIZE);
-      const followPromises = flatProfilesChunks.map((chunk) =>
-        doesFollow(
-          address,
-          chunk.map((item) => item.id)
-        )
-      );
-      const doesFollowResult = await Promise.all(followPromises);
-      followsArray = doesFollowResult.flatMap((array) => array.doesFollow);
-      console.log(followsArray);
+    newFrens = newFrens.filter((fren) => fren.lens.id);
 
-      // Add Lens follow data to the new frens
-      newFrens.forEach((fren) => {
-        const lensFren = followsArray.find(
-          (follows) => follows.profileId.toLowerCase() === fren.lens.id
-        );
-        fren.lens.follows = lensFren?.follows;
-      });
+    // Then find if the user is following them
+    if (address) {
+      await modifyFollows(address, newFrens);
     }
 
     const sortAlphabetically = (a, b) =>

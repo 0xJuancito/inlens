@@ -13,14 +13,21 @@ import jwt from "jsonwebtoken";
 import { setAddress, setSigner } from "../lib/ethers.service";
 import { refresh } from "../lib/refresh";
 import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
-import { findFrens, TooManyRequestsError } from "../lib/find-frens";
+import {
+  findFrens,
+  modifyFollows,
+  TooManyRequestsError,
+} from "../lib/find-frens";
 import { freeFollow } from "../lib/follow";
 import { ReactNotifications } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Store } from "react-notifications-component";
+import { profiles } from "../lib/get-profiles";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
+
+  const [showLogin, setShowLogin] = useState(false);
 
   const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -42,6 +49,11 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const queryString = window.location.search;
+    if (queryString === "?showlogin=true") {
+      setShowLogin(true);
+    }
+
     const newModal = new Web3Modal({
       // cacheProvider: true,
       providerOptions: {},
@@ -105,24 +117,7 @@ export default function Home() {
   const checkProvider = async () => {};
 
   const followRequest = async (id: string) => {
-    const newFrens = [...frens];
-    const fren = newFrens.find((fren) => fren.lens.id === id);
-    if (fren.lens.follows) {
-      return;
-    }
-
-    fren.lens.follows = true;
-    setFrens(newFrens);
-
-    try {
-      const newInstance = await web3Modal.connect();
-      setInstance(newInstance);
-
-      const provider = new ethers.providers.Web3Provider(newInstance);
-      const signer = provider.getSigner();
-      setSigner(signer);
-      await freeFollow(id);
-
+    const notifySuccess = () => {
       Store.addNotification({
         title: "Transaction sent!",
         message: "You will see the update in a few seconds!",
@@ -136,10 +131,71 @@ export default function Home() {
           onScreen: true,
         },
       });
+    };
+
+    const newFrens = [...frens];
+    const fren = newFrens.find((fren) => fren.lens.id === id);
+    if (fren.lens.waitingFollow || fren.lens.follows) {
+      return;
+    }
+    fren.lens.waitingFollow = true;
+    setFrens(newFrens);
+
+    try {
+      const connected = await connect();
+      if (!connected) {
+        throw new Error("Sign in failed");
+      }
+      const newFrensConnect = [...frens];
+      const frenConnect = newFrensConnect.find((fren) => fren.lens.id === id);
+      frenConnect.lens.follows = true;
+      setFrens(newFrensConnect);
+
+      await freeFollow(id);
+
+      const newFrens = [...frens];
+      const fren = newFrens.find((fren) => fren.lens.id === id);
+      fren.lens.follows = true;
+      fren.lens.waitingFollow = false;
+      setFrens(newFrens);
+
+      notifySuccess();
     } catch (err) {
+      const errorMessage =
+        err.message || "Please try again in a few seconds 🙏";
+
+      const newFrens = [...frens];
+      const fren = newFrens.find((fren) => fren.lens.id === id);
+      fren.lens.waitingFollow = false;
+      setFrens(newFrens);
+      console.error(err);
+
+      if (errorMessage === "You are already following this profile") {
+        notifySuccess();
+      } else {
+        fren.lens.follows = false;
+        Store.addNotification({
+          title: "There was an error",
+          message: errorMessage,
+          type: "danger",
+          insert: "bottom",
+          container: "bottom-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      }
+    }
+  };
+
+  const connect = async (): Promise<boolean> => {
+    if (!window.ethereum) {
       Store.addNotification({
-        title: "There was an error",
-        message: "Please try again in a few seconds 🙏",
+        title: "No wallet installed",
+        message: "Please install a wallet to use the app",
         type: "danger",
         insert: "bottom",
         container: "bottom-right",
@@ -150,18 +206,14 @@ export default function Home() {
           onScreen: true,
         },
       });
-
-      const newFrens = [...frens];
-      const fren = newFrens.find((fren) => fren.lens.id === id);
-      fren.lens.follows = false;
-      setFrens(newFrens);
-      console.error(err);
+      return false;
     }
-  };
 
-  const connect = async () => {
     if (loggingIn) {
-      return;
+      return false;
+    }
+    if (loggedIn) {
+      return true;
     }
     try {
       setLoggingIn(true);
@@ -176,21 +228,48 @@ export default function Home() {
       const accessToken = await login(address);
 
       const response = await getDefaultProfile();
-      if (!response.defaultProfile) {
+      let defaultProfile = response?.defaultProfile?.handle;
+
+      if (!defaultProfile) {
+        const profilesResponse = await profiles({
+          ownedBy: address,
+        });
+
+        console.log(profilesResponse);
+        defaultProfile =
+          profilesResponse?.profiles?.items &&
+          profilesResponse?.profiles?.items[0]?.handle;
+      }
+
+      if (!defaultProfile) {
         claimPopup.current.open();
         setLoggingIn(false);
         setAuthenticationToken(null);
         return;
       }
 
-      storeProfile(response.defaultProfile.handle, accessToken.authenticate);
+      try {
+        if (frens.length) {
+          const newFrens = [...frens];
+          await modifyFollows(address, newFrens);
+          setFrens(newFrens);
+        }
+      } catch (err) {
+        console.error(err);
+      }
 
-      setLensHandle(response.defaultProfile.handle);
+      storeProfile(defaultProfile, accessToken.authenticate);
+
+      setLensHandle(defaultProfile);
       setLoggedIn(true);
+      setLoggingIn(false);
+
+      return true;
     } catch (error) {
       console.error(error);
+      setLoggingIn(false);
+      return false;
     }
-    setLoggingIn(false);
   };
 
   const findFrensRequest = async () => {
@@ -242,21 +321,28 @@ export default function Home() {
       `https://lensfrens.xyz/${handle.toLowerCase()}`;
 
     const renderFollowing = (fren) => {
-      const follows = fren.lens?.follows;
-      if (follows === undefined) {
+      if (!showLogin) {
         return "";
-      } else if (follows === true) {
-        return <button className={styles.following}>{"Following"}</button>;
       }
-      return (
-        <button
-          className={styles.follow}
-          onClick={() => followRequest(fren.lens.id)}
-        >
-          <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
-          {"Follow"}
-        </button>
-      );
+
+      if (fren.lens?.follows) {
+        return <button className={styles.following}>{"Following"}</button>;
+      } else {
+        return (
+          <button
+            className={styles.follow}
+            onClick={() => followRequest(fren.lens.id)}
+          >
+            <Image
+              height="40"
+              width="40"
+              src="/lens.svg"
+              alt="Lens Logo"
+            ></Image>
+            {"Follow"}
+          </button>
+        );
+      }
     };
 
     const defaultAvatar =
@@ -344,6 +430,10 @@ export default function Home() {
   };
 
   const renderLogin = () => {
+    if (!showLogin) {
+      return "";
+    }
+
     return (
       <button
         className={styles.signIn}
@@ -407,6 +497,10 @@ export default function Home() {
       <div className={styles.container}>
         <Head>
           <title>Who is in Lens?</title>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          ></meta>
           <meta
             name="description"
             content="​Find your friends from Twitter in Lens Protocol 🌿"

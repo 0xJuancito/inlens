@@ -43,7 +43,6 @@ export const getDefaultProfile = async () => {
   console.log("get default profile: address", address);
 
   const result = await getDefaultProfileRequest(address);
-  // prettyJSON("profiles: result", result.data);
 
   return result.data;
 };

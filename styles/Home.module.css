@@ -139,7 +139,6 @@
 
 .following {
   min-width: 100px;
-  padding: 10px;
 }
 
 .twitterInputAt {
@@ -188,26 +187,64 @@
 
 .frensContainer {
   text-align: center;
+  max-width: 100vw;
 }
 
-.frensContainer li {
-  border: 1px solid #eaeaea;
-  border-radius: 0.25rem;
-  padding: 10px;
-  margin: 15px 0;
+.userCard {
+  border-bottom: 1px solid #eaeaea;
+  padding: 12px 16px;
+  margin: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
   min-width: 400px;
-  max-width: 100vw;
+  max-width: 100%;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.userCard a {
+  text-decoration: none;
+}
+
+.profileContainer {
+  text-align: left;
+  flex-grow: 1;
+}
+
+.profileName {
+  font-weight: 800;
+}
+
+.profileDescription {
+  margin-top: 5px;
+}
+
+.userCard img {
+  border-radius: 50%;
+}
+
+.avatarContainer {
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  margin-right: 12px;
 }
 
 .frensContainer button {
   margin: 0;
+  height: 32px;
+}
+
+.frensContainer ul {
+  max-width: 600px;
 }
 
 .signIn {
-  display: none;
+  display: flex;
   align-items: center;
   padding-left: 5px;
   min-width: 100px;

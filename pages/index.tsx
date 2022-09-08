@@ -246,7 +246,7 @@ export default function Home() {
       if (follows === undefined) {
         return "";
       } else if (follows === true) {
-        return <button className={styles.following}>{"✓ Following"}</button>;
+        return <button className={styles.following}>{"Following"}</button>;
       }
       return (
         <button
@@ -259,32 +259,55 @@ export default function Home() {
       );
     };
 
+    const defaultAvatar =
+      "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png";
+
     return (
       <div className={styles.frensContainer}>
-        <div>
-          Found {frens.length} frens in Lens! {"🤎"}
-        </div>
         <ul>
           {frens.map((fren) => (
-            <li key={fren.twitter.handle}>
-              <a
-                className={styles.twitter}
-                href={twitterUrl(fren.twitter.handle)}
-                target={"_blank"}
-                rel={"noreferrer"}
-              >
-                @{fren.twitter.handle}
-              </a>
-              <a
-                className={styles.lens}
-                href={lensUrl(fren.lens.handle)}
-                target={"_blank"}
-                rel={"noreferrer"}
-              >
-                {"🌿 "}
-                {fren.lens.handle}
-              </a>
-              {renderFollowing(fren)}
+            <li className={styles.userCard} key={fren.twitter.handle}>
+              <div className={styles.avatarContainer}>
+                <Image
+                  height="48"
+                  width="48"
+                  src={fren.twitter.avatar || defaultAvatar}
+                  alt="User Avatar"
+                ></Image>
+              </div>
+              <div className={styles.profileContainer}>
+                <div className={styles.profileHeader}>
+                  <div className={styles.profileNameContainer}>
+                    <div className={styles.profileName}>
+                      {fren.twitter.name}
+                    </div>
+                    <div>
+                      <a
+                        className={styles.twitter}
+                        href={twitterUrl(fren.twitter.handle)}
+                        target={"_blank"}
+                        rel={"noreferrer"}
+                      >
+                        @{fren.twitter.handle}
+                      </a>
+                      {" | "}
+                      <a
+                        className={styles.lens}
+                        href={lensUrl(fren.lens.handle)}
+                        target={"_blank"}
+                        rel={"noreferrer"}
+                      >
+                        {fren.lens.handle}
+                      </a>
+                    </div>
+                  </div>
+                  {renderFollowing(fren)}
+                </div>
+
+                <div className={styles.profileDescription}>
+                  {fren.twitter.description}
+                </div>
+              </div>
             </li>
           ))}
         </ul>

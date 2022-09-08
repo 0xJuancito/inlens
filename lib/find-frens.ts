@@ -1,15 +1,32 @@
 import { profiles } from "../lib/get-profiles";
 import { doesFollow } from "../lib/does-follow";
 
+type ApiFren = {
+  twitter: {
+    handle: string;
+    name: string;
+    description: string | null;
+    avatar: string | null;
+  };
+  lens: {
+    handle: string;
+  };
+  ensName: string | null;
+};
+
 export type Fren = {
   twitter: {
     handle: string;
+    name: string;
+    description: string | null;
+    avatar: string | null;
   };
   lens: {
     handle: string;
     follows?: boolean;
     id?: string;
   };
+  ensName: string | null;
 };
 
 export class TooManyRequestsError extends Error {}
@@ -23,21 +40,27 @@ export const findFrens = async (
   const res = await fetch(`/api/frens?username=${twitterHandle}`);
 
   if (res.status === 200) {
-    const apiFrens = await res.json();
+    const apiFrens: ApiFren[] = await res.json();
 
     // Filter lens users. The API only supports names between 5 and 31 characters (+ 5 for the .lens)
     const filteredFrens = apiFrens.filter(
-      (fren) => fren.lens.length >= 10 && fren.lens.length <= 36
+      (fren) => fren.lens.handle.length >= 10 && fren.lens.handle.length <= 36
     );
-    const handleIds = filteredFrens.map((fren) => fren.lens.toLowerCase());
+    const handleIds = filteredFrens.map((fren) =>
+      fren.lens.handle.toLowerCase()
+    );
 
     const newFrens: Fren[] = filteredFrens.map((fren) => ({
       twitter: {
-        handle: fren.twitter,
+        handle: fren.twitter.handle,
+        name: fren.twitter.name,
+        description: fren.twitter.description,
+        avatar: fren.twitter.avatar,
       },
       lens: {
-        handle: fren.lens.toLowerCase(),
+        handle: fren.lens.handle.toLowerCase(),
       },
+      ensName: fren.ensName,
     }));
 
     // First get Lens profile

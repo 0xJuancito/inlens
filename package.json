@@ -21,7 +21,7 @@
     "react-notifications-component": "^4.0.1",
     "reactjs-popup": "^2.0.5",
     "web3modal": "^1.7.0",
-    "who-is-in-lens": "^1.0.8"
+    "who-is-in-lens": "^2.0.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.9",

@@ -324,7 +324,7 @@ export default function Home() {
       if (err instanceof TooManyRequestsError) {
         title = "No slots available";
         message =
-          "Login with Twitter to skip the queue or try again in a few minutes ⌛️";
+          "Login with Twitter to skip the line or try again in a few minutes ⌛️";
       }
 
       Store.addNotification({
@@ -637,7 +637,7 @@ export default function Home() {
           {showLogin && !waiting && !frens?.length ? (
             <div>
               💡 <span className={styles.tip}>Login with Twitter</span> and skip
-              the queue!
+              the line!
             </div>
           ) : (
             ""

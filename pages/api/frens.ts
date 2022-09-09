@@ -14,11 +14,11 @@ export default async function handler(
 ) {
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
-  let accessToken;
+  let accessToken: string;
   if (token?.accessToken && token?.exp) {
-    const expirationDate = token.exp * 1000;
+    const expirationDate = (token.exp as number) * 1000;
     if (Date.now() < expirationDate) {
-      accessToken = token.accessToken;
+      accessToken = token.accessToken as string;
     }
   }
 

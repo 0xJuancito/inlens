@@ -267,19 +267,6 @@
   font-weight: 600 !important;
 }
 
-.inlensText {
-  font-family: "Space Grotesk";
-  font-size: 28px;
-  font-weight: 800;
-  margin-left: 18px;
-  cursor: default;
-}
-
-.inlensContainer {
-  display: flex;
-  align-items: center;
-}
-
 .ldsheart {
   width: 40px;
   height: 40px;

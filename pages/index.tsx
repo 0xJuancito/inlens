@@ -30,6 +30,7 @@ import {
 import ClaimPopup from "../components/popup";
 import Footer from "../components/footer";
 import AppHead from "../components/app-head";
+import InlensLogoNav from "../components/inlens-logo-nav";
 
 export default function Home() {
   const { data } = useSession();
@@ -518,15 +519,7 @@ export default function Home() {
       <ReactNotifications />
       <header>
         <nav>
-          <div className={styles.inlensContainer}>
-            <Image
-              height="48"
-              width="48"
-              src="/birdie.svg"
-              alt="inlens logo"
-            ></Image>
-            <span className={styles.inlensText}>inlens</span>
-          </div>
+          <InlensLogoNav></InlensLogoNav>
           <div className={styles.loginContainer}>
             {showLogin ? (
               <button

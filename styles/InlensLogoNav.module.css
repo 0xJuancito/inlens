@@ -1,0 +1,12 @@
+.inlensContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  .inlensText {
+    font-family: "Space Grotesk";
+    font-size: 28px;
+    font-weight: 800;
+    margin-left: 18px;
+    cursor: default;
+  }

@@ -31,6 +31,8 @@ export type Fren = {
 
 export class TooManyRequestsError extends Error {}
 export class NoFollowingError extends Error {}
+export class AuthorizationError extends Error {}
+
 const CHUNK_SIZE = 50;
 
 export const modifyFollows = async (
@@ -65,6 +67,8 @@ export const findFrens = async (
 
   if (res.status === 429) {
     throw new TooManyRequestsError();
+  } else if (res.status === 401) {
+    throw new AuthorizationError();
   } else if (res.status !== 200) {
     throw new NoFollowingError();
   }

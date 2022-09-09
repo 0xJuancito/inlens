@@ -12,6 +12,7 @@ import { setAddress, setSigner } from "../lib/ethers.service";
 import { refresh } from "../lib/refresh";
 import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
 import {
+  AuthorizationError,
   findFrens,
   modifyFollows,
   TooManyRequestsError,
@@ -27,6 +28,7 @@ import Footer from "../components/footer";
 import AppHead from "../components/app-head";
 import InlensLogoNav from "../components/inlens-logo-nav";
 import TwitterLogin from "../components/twitter-login";
+import { signOut } from "next-auth/react";
 
 export default function Home() {
   const [waiting, setWaiting] = useState(false);
@@ -319,6 +321,11 @@ export default function Home() {
         title = "No slots available";
         message =
           "Login with Twitter to skip the line or try again in a few minutes ⌛️";
+      }
+      if (err instanceof AuthorizationError) {
+        title = "Authorization Error";
+        message = "Your Twitter session has expired. Please login again";
+        await signOut();
       }
 
       Store.addNotification({

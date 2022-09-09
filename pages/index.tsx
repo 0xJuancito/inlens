@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState, useEffect, SetStateAction } from "react";
 import styles from "../styles/Home.module.css";
@@ -30,6 +29,7 @@ import {
 
 import ClaimPopup from "../components/popup";
 import Footer from "../components/footer";
+import AppHead from "../components/app-head";
 
 export default function Home() {
   const { data } = useSession();
@@ -514,6 +514,7 @@ export default function Home() {
 
   return (
     <div>
+      <AppHead></AppHead>
       <ReactNotifications />
       <header>
         <nav>
@@ -557,53 +558,6 @@ export default function Home() {
         </nav>
       </header>
       <div className={styles.container}>
-        <Head>
-          <title>Who is in Lens?</title>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          ></meta>
-          <meta
-            name="description"
-            content="​Find your friends from Twitter in Lens Protocol 🌿"
-          />
-          <link rel="icon" href="/favicon.ico" />
-
-          {/* <!-- Primary Meta Tags --> */}
-          <title>Who is in Lens?</title>
-          <meta name="title" content="Who is in Lens?" />
-          <meta
-            name="description"
-            content="​Find your friends from Twitter in Lens Protocol"
-          />
-
-          {/* <!-- Open Graph / Facebook --> */}
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://inlens.xyz/" />
-          <meta property="og:title" content="Who is in Lens?" />
-          <meta
-            property="og:description"
-            content="​Find your friends from Twitter in Lens Protocol"
-          />
-          <meta property="og:image" content="https://inlens.xyz/inlens.png" />
-
-          {/* <!-- Twitter --> */}
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content="https://inlens.xyz/" />
-          <meta property="twitter:title" content="Who is in Lens?" />
-          <meta
-            property="twitter:description"
-            content="​Find your friends from Twitter in Lens Protocol"
-          />
-          <meta
-            property="twitter:image"
-            content="https://inlens.xyz/inlens.png"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&amp;display=swap"
-            rel="preload"
-          ></link>
-        </Head>
         <main className={styles.main}>
           <h1 className={styles.title}>WHO IS IN LENS?</h1>
           <p className={styles.description}>

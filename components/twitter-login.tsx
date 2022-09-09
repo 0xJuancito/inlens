@@ -22,7 +22,7 @@ const TwitterLogin = () => {
     }
   }, [data]);
 
-  return showLogin ? (
+  return (
     <button
       className={styles.twitterLogin}
       onClick={async (e) => {
@@ -44,8 +44,6 @@ const TwitterLogin = () => {
         {loggedInTwitter ? "Logout" : "Login"}
       </span>
     </button>
-  ) : (
-    ""
   );
 };
 

@@ -519,7 +519,7 @@ export default function Home() {
         <nav>
           <InlensLogoNav></InlensLogoNav>
           <div className={styles.loginContainer}>
-            <TwitterLogin></TwitterLogin>
+            {showLogin ? <TwitterLogin></TwitterLogin> : ""}
             {loggedInLens ? renderLoggedInLens() : renderLogin()}
           </div>
         </nav>

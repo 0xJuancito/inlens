@@ -599,28 +599,21 @@ export default function Home() {
           <p className={styles.description}>
             ​Find your friends from Twitter in Lens Protocol 🌿
           </p>
-
-          <div>
-            <label className={styles.yourTwitterHandle}>
-              Your Twitter handle:
-            </label>
-            <div className={styles.inputContainer}>
-              <div className={styles.twitterInputContainer}>
-                <span className={styles.twitterInputAt}>@</span>
-                <input
-                  type="text"
-                  name="twitterInput"
-                  className={styles.twitterInput}
-                  ref={twitterInput}
-                  value={inputValue}
-                  onChange={onChangeHandler}
-                  placeholder="TwitterHandle"
-                ></input>
-              </div>
-              <button onClick={() => findFrensRequest()}>Find Frens!</button>
+          <div className={styles.inputContainer}>
+            <div className={styles.twitterInputContainer}>
+              <span className={styles.twitterInputAt}>@</span>
+              <input
+                type="text"
+                name="twitterInput"
+                className={styles.twitterInput}
+                ref={twitterInput}
+                value={inputValue}
+                onChange={onChangeHandler}
+                placeholder="TwitterHandle"
+              ></input>
             </div>
+            <button onClick={() => findFrensRequest()}>Find Frens!</button>
           </div>
-
           <div className={styles.pleaseWait}>
             {waiting === true ? "Finding frens in Lens. Please wait :)" : ""}
           </div>

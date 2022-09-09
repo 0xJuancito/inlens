@@ -115,20 +115,13 @@
 
 .inputContainer {
   display: flex;
-  margin-top: 5px;
-}
-
-.yourTwitterHandle {
-  font-weight: 600;
-  font-size: 14px;
 }
 
 .inputContainer button {
   min-width: 110px;
   margin-right: 0;
-  background-color: #abfe2c;
-  color: #212322;
-  font-weight: 800;
+  background-color: #d3b6ff;
+  color: #fff;
 }
 
 .twitterInputContainer {

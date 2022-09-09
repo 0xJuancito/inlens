@@ -318,9 +318,18 @@ export default function Home() {
         });
       }
     } catch (err) {
+      let title = "No frens found :(";
+      let message = "There are no Lens frens for that profile";
+
+      if (err instanceof TooManyRequestsError) {
+        title = "No slots available";
+        message =
+          "Login with Twitter to skip the queue or try again in a few minutes ⌛️";
+      }
+
       Store.addNotification({
-        title: "No slots available",
-        message: "Login with Twitter or try again in a few minutes ⌛️",
+        title: title,
+        message: message,
         type: "danger",
         insert: "bottom",
         container: "bottom-right",
@@ -331,7 +340,6 @@ export default function Home() {
           onScreen: true,
         },
       });
-      console.log(err);
     }
     setWaiting(false);
   };

@@ -1,0 +1,13 @@
+diff --git a/node_modules/next-auth/providers/twitter.js b/node_modules/next-auth/providers/twitter.js
+index c0d1df5..6048f72 100644
+--- a/node_modules/next-auth/providers/twitter.js
++++ b/node_modules/next-auth/providers/twitter.js
+@@ -40,7 +40,7 @@ function Twitter(options) {
+       authorization: {
+         url: "https://twitter.com/i/oauth2/authorize",
+         params: {
+-          scope: "users.read tweet.read offline.access"
++          scope: "users.read tweet.read offline.access follows.read"
+         }
+       },
+       token: {

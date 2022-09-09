@@ -23,18 +23,25 @@ import { ReactNotifications } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Store } from "react-notifications-component";
 import { profiles } from "../lib/get-profiles";
+import {
+  signIn as signInWithTwitter,
+  signOut as signOutTwitter,
+  useSession,
+} from "next-auth/react";
 
 export default function Home() {
+  const { data } = useSession();
+
+  const [loggedInTwitter, setLoggedInTwitter] = useState(false);
   const [waiting, setWaiting] = useState(false);
 
   const [showLogin, setShowLogin] = useState(false);
 
-  const [loggingIn, setLoggingIn] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggingInLens, setLoggingInLens] = useState(false);
+  const [loggedInLens, setLoggedInLens] = useState(false);
   const [lensHandle, setLensHandle] = useState("");
 
   const [frens, setFrens] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
   const [instance, setInstance] = useState<any>();
@@ -49,6 +56,8 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setLoggedInTwitter(!!data?.user);
+
     const queryString = window.location.search;
     if (queryString === "?showlogin=true") {
       setShowLogin(true);
@@ -61,7 +70,7 @@ export default function Home() {
     });
     setWeb3Modal(newModal);
     if (twitterInput.current) twitterInput.current.focus();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -96,7 +105,7 @@ export default function Home() {
       }
 
       setLensHandle(handle);
-      setLoggedIn(true);
+      setLoggedInLens(true);
       setAuthenticationToken(accessToken);
     };
     loadProfile();
@@ -209,14 +218,14 @@ export default function Home() {
       return false;
     }
 
-    if (loggingIn) {
+    if (loggingInLens) {
       return false;
     }
-    if (loggedIn) {
+    if (loggedInLens) {
       return true;
     }
     try {
-      setLoggingIn(true);
+      setLoggingInLens(true);
       const newInstance = await web3Modal.connect();
       setInstance(newInstance);
 
@@ -243,7 +252,7 @@ export default function Home() {
 
       if (!defaultProfile) {
         claimPopup.current.open();
-        setLoggingIn(false);
+        setLoggingInLens(false);
         setAuthenticationToken(null);
         return;
       }
@@ -261,13 +270,13 @@ export default function Home() {
       storeProfile(defaultProfile, accessToken.authenticate);
 
       setLensHandle(defaultProfile);
-      setLoggedIn(true);
-      setLoggingIn(false);
+      setLoggedInLens(true);
+      setLoggingInLens(false);
 
       return true;
     } catch (error) {
       console.error(error);
-      setLoggingIn(false);
+      setLoggingInLens(false);
       return false;
     }
   };
@@ -285,7 +294,6 @@ export default function Home() {
     }
 
     setFrens([]);
-    setErrorMessage("");
 
     try {
       let accessToken = localStorage.getItem("access_token");
@@ -297,15 +305,33 @@ export default function Home() {
       if (newFrens.length) {
         setFrens(newFrens);
       } else {
-        setErrorMessage("No friend was found :(");
+        Store.addNotification({
+          title: "No friend was found :(",
+          type: "danger",
+          insert: "bottom",
+          container: "bottom-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
       }
     } catch (err) {
-      if (err instanceof TooManyRequestsError) {
-        setErrorMessage(err.message);
-      }
-      setErrorMessage(
-        "Too many requests. Please try again in a few minutes ⌛️"
-      );
+      Store.addNotification({
+        title: "No slots available",
+        message: "Login with Twitter or try again in a few minutes ⌛️",
+        type: "danger",
+        insert: "bottom",
+        container: "bottom-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+        },
+      });
       console.log(err);
     }
     setWaiting(false);
@@ -410,7 +436,7 @@ export default function Home() {
   };
 
   const renderLoading = () => {
-    if (!loggingIn) {
+    if (!loggingInLens) {
       return "";
     }
     return (
@@ -421,7 +447,7 @@ export default function Home() {
   };
 
   const renderLoginImage = () => {
-    if (loggingIn) {
+    if (loggingInLens) {
       return "";
     }
     return (
@@ -438,7 +464,7 @@ export default function Home() {
       <button
         className={styles.signIn}
         onClick={() => connect()}
-        disabled={loggingIn}
+        disabled={loggingInLens}
       >
         {renderLoginImage()}
         {renderLoading()}
@@ -448,13 +474,13 @@ export default function Home() {
   };
 
   const logout = async () => {
-    setLoggedIn(false);
+    setLoggedInLens(false);
     setAddress(null);
     setAuthenticationToken(null);
     clearProfile();
   };
 
-  const renderLoggedIn = () => {
+  const renderLoggedInLens = () => {
     return (
       <Menu
         align="end"
@@ -491,7 +517,34 @@ export default function Home() {
             ></Image>
             <span className={styles.inlensText}>inlens</span>
           </div>
-          {loggedIn ? renderLoggedIn() : renderLogin()}
+          <div className={styles.loginContainer}>
+            {showLogin ? (
+              <button
+                className={styles.twitterLogin}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (loggedInTwitter) {
+                    await signOutTwitter();
+                  } else {
+                    await signInWithTwitter("twitter");
+                  }
+                }}
+              >
+                <Image
+                  height="18"
+                  width="18"
+                  src="/twitter.svg"
+                  alt="twitter logo"
+                ></Image>
+                <span className={styles.twitterLoginText}>
+                  {loggedInTwitter ? "Logout" : "Login"}
+                </span>
+              </button>
+            ) : (
+              ""
+            )}
+            {loggedInLens ? renderLoggedInLens() : renderLogin()}
+          </div>
         </nav>
       </header>
       <div className={styles.container}>
@@ -567,7 +620,15 @@ export default function Home() {
           </div>
           <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
           {waiting === true ? renderHeart() : ""}
-          <div>{!waiting && errorMessage}</div>
+          {showLogin && !waiting && !frens?.length ? (
+            <div>
+              💡 <span className={styles.tip}>Login with Twitter</span> and skip
+              the queue!
+            </div>
+          ) : (
+            ""
+          )}
+
           <div>{!waiting && frensList()}</div>
         </main>
 

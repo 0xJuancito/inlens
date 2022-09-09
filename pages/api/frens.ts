@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { findFriends } from "who-is-in-lens";
 import rateLimit from "../../utils/rate-limit";
+import { getToken } from "next-auth/jwt";
 
 const limiter = rateLimit({
   interval: 60 * 1000 * 15, // 15 minutes
@@ -11,6 +12,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req, secret });
+  let accessToken;
+  if (token?.accessToken && token?.exp) {
+    const expirationDate = token.exp * 1000;
+    if (Date.now() < expirationDate) {
+      accessToken = token.accessToken;
+    }
+  }
+
   const { username: rawUsername } = req.query;
 
   const username =
@@ -22,7 +33,7 @@ export default async function handler(
 
   try {
     await limiter.check(res, 50, "CACHE_TOKEN"); // 50 requests per 15 minutes
-    const frens = await findFriends(username);
+    const frens = await findFriends(username, accessToken);
     res.status(200).json(frens);
   } catch {
     res.status(429).json({ error: "Rate limit exceeded" });

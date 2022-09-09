@@ -7,7 +7,6 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { login } from "../lib/login";
 import { getDefaultProfile } from "../lib/get-default-profile";
-import ClaimPopup from "../components/popup";
 import { setAuthenticationToken } from "../lib/state";
 import jwt from "jsonwebtoken";
 import { setAddress, setSigner } from "../lib/ethers.service";
@@ -28,6 +27,9 @@ import {
   signOut as signOutTwitter,
   useSession,
 } from "next-auth/react";
+
+import ClaimPopup from "../components/popup";
+import Footer from "../components/footer";
 
 export default function Home() {
   const { data } = useSession();
@@ -646,22 +648,7 @@ export default function Home() {
           <div>{!waiting && frensList()}</div>
         </main>
 
-        <footer className={styles.footer}>
-          <span role="img" aria-label="sheep">
-            Built with 🌿 by
-          </span>
-          <a href="https://www.lensfrens.xyz/juancito.lens" target="blank">
-            juancito.lens
-          </a>
-          &nbsp; | &nbsp;
-          <a
-            href="https://github.com/juanscolari/who-is-in-lens"
-            target={"_blank"}
-            rel={"noreferrer"}
-          >
-            GitHub
-          </a>
-        </footer>
+        <Footer></Footer>
       </div>
       <ClaimPopup ref={claimPopup}></ClaimPopup>
     </div>

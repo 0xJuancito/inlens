@@ -250,19 +250,6 @@
   align-items: center;
 }
 
-.twitterLogin {
-  background-color: #d3b6ff;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-}
-
-.twitterLoginText {
-  margin-left: 6px;
-}
-
 .tip {
   font-weight: 600 !important;
 }

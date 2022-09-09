@@ -21,21 +21,14 @@ import { ReactNotifications } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Store } from "react-notifications-component";
 import { profiles } from "../lib/get-profiles";
-import {
-  signIn as signInWithTwitter,
-  signOut as signOutTwitter,
-  useSession,
-} from "next-auth/react";
 
 import ClaimPopup from "../components/popup";
 import Footer from "../components/footer";
 import AppHead from "../components/app-head";
 import InlensLogoNav from "../components/inlens-logo-nav";
+import TwitterLogin from "../components/twitter-login";
 
 export default function Home() {
-  const { data } = useSession();
-
-  const [loggedInTwitter, setLoggedInTwitter] = useState(false);
   const [waiting, setWaiting] = useState(false);
 
   const [showLogin, setShowLogin] = useState(false);
@@ -59,8 +52,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setLoggedInTwitter(!!data?.user);
-
     const queryString = window.location.search;
     if (queryString === "?showlogin=true") {
       setShowLogin(true);
@@ -73,7 +64,7 @@ export default function Home() {
     });
     setWeb3Modal(newModal);
     if (twitterInput.current) twitterInput.current.focus();
-  }, [data]);
+  }, []);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -521,31 +512,7 @@ export default function Home() {
         <nav>
           <InlensLogoNav></InlensLogoNav>
           <div className={styles.loginContainer}>
-            {showLogin ? (
-              <button
-                className={styles.twitterLogin}
-                onClick={async (e) => {
-                  e.preventDefault();
-                  if (loggedInTwitter) {
-                    await signOutTwitter();
-                  } else {
-                    await signInWithTwitter("twitter");
-                  }
-                }}
-              >
-                <Image
-                  height="18"
-                  width="18"
-                  src="/twitter.svg"
-                  alt="twitter logo"
-                ></Image>
-                <span className={styles.twitterLoginText}>
-                  {loggedInTwitter ? "Logout" : "Login"}
-                </span>
-              </button>
-            ) : (
-              ""
-            )}
+            <TwitterLogin></TwitterLogin>
             {loggedInLens ? renderLoggedInLens() : renderLogin()}
           </div>
         </nav>

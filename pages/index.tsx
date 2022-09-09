@@ -181,7 +181,7 @@ export default function Home() {
 
       if (errorMessage === "You are already following this profile") {
         notifySuccess();
-      } else {
+      } else if (errorMessage !== "Sign in failed") {
         fren.lens.follows = false;
         Store.addNotification({
           title: "There was an error",
@@ -203,7 +203,7 @@ export default function Home() {
   const connect = async (): Promise<boolean> => {
     if (!window.ethereum) {
       Store.addNotification({
-        title: "No wallet installed",
+        title: "No wallet found",
         message: "Please install a wallet to use the app",
         type: "danger",
         insert: "bottom",

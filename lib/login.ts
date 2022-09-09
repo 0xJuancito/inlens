@@ -63,7 +63,6 @@ export const login = async (address?: string) => {
   const signature = await signText(challengeResponse.data.challenge.text);
 
   const accessTokens = await authenticate(address, signature);
-  console.log("login: result", accessTokens.data);
 
   setAuthenticationToken(accessTokens.data.authenticate.accessToken);
 

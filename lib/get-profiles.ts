@@ -49,7 +49,6 @@ const getProfilesRequest = (request: ProfilesRequest) => {
 
 export const profiles = async (request?: ProfilesRequest) => {
   const address = getAddressFromSigner();
-  console.log("profiles: address", address);
 
   await login(address);
 

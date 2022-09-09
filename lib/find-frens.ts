@@ -46,7 +46,6 @@ export const modifyFollows = async (
   );
   const doesFollowResult = await Promise.all(followPromises);
   followsArray = doesFollowResult.flatMap((array) => array.doesFollow);
-  console.log(followsArray);
 
   // Add Lens follow data to the new frens
   newFrens.forEach((fren) => {
@@ -96,7 +95,6 @@ export const findFrens = async (
     const lensProfiles = profilesReponse.flatMap(
       (handle) => handle.profiles.items
     );
-    console.log(lensProfiles);
 
     // Add Lens profile data to the new frens
     newFrens.forEach((fren) => {

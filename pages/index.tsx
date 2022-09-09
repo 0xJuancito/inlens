@@ -244,7 +244,6 @@ export default function Home() {
           ownedBy: address,
         });
 
-        console.log(profilesResponse);
         defaultProfile =
           profilesResponse?.profiles?.items &&
           profilesResponse?.profiles?.items[0]?.handle;

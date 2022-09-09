@@ -614,7 +614,7 @@ export default function Home() {
                   ref={twitterInput}
                   value={inputValue}
                   onChange={onChangeHandler}
-                  placeholder="TwitterHandle"
+                  placeholder="LensProtocol"
                 ></input>
               </div>
               <button onClick={() => findFrensRequest()}>Find Frens!</button>

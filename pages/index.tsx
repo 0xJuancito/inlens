@@ -355,10 +355,6 @@ export default function Home() {
       `https://lensfrens.xyz/${handle.toLowerCase()}`;
 
     const renderFollowing = (fren) => {
-      if (!showLogin) {
-        return "";
-      }
-
       if (fren.lens?.follows) {
         return <button className={styles.following}>{"Following"}</button>;
       } else {
@@ -464,10 +460,6 @@ export default function Home() {
   };
 
   const renderLogin = () => {
-    if (!showLogin) {
-      return "";
-    }
-
     return (
       <button
         className={styles.signIn}

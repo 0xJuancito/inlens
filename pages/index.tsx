@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import Image from "next/image";
-import { useRef, useState, useEffect, SetStateAction } from "react";
+import { useRef, useState, useEffect, SetStateAction, useContext } from "react";
 import styles from "../styles/Home.module.css";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
@@ -29,8 +29,12 @@ import AppHead from "../components/app-head";
 import InlensLogoNav from "../components/inlens-logo-nav";
 import TwitterLogin from "../components/twitter-login";
 import { signOut } from "next-auth/react";
+import { UserContext } from "./_app";
+import { clearProfile, loadProfile, storeProfile } from "../lib/user";
 
 export default function Home() {
+  const user = useContext(UserContext);
+
   const [waiting, setWaiting] = useState(false);
 
   const [showLogin, setShowLogin] = useState(false);
@@ -69,55 +73,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const loadProfile = async () => {
-      const handle = localStorage.getItem("lens_handle");
-      let accessToken = localStorage.getItem("access_token");
-      const refreshToken = localStorage.getItem("refresh_token");
-
-      if (!handle || !accessToken || !refreshToken) {
-        clearProfile();
-        return;
+    loadProfile().then((handle) => {
+      if (handle) {
+        setLoggedInLens(true);
+        setLensHandle(handle);
       }
-
-      try {
-        const decodedAccess = jwt.decode(accessToken, { json: true });
-        const decodedRefresh = jwt.decode(refreshToken, { json: true });
-
-        if (Date.now() >= decodedRefresh.exp * 1000) {
-          clearProfile();
-          return;
-        }
-
-        if (Date.now() >= decodedAccess.exp * 1000) {
-          const newTokens = await refresh(decodedRefresh.id, refreshToken);
-          storeProfile(handle, newTokens);
-          accessToken = newTokens.accessToken;
-        }
-        setAddress(decodedRefresh.id);
-      } catch (error) {
-        clearProfile();
-        console.error(error);
-        return;
-      }
-
-      setLensHandle(handle);
-      setLoggedInLens(true);
-      setAuthenticationToken(accessToken);
-    };
-    loadProfile();
+    });
   }, []);
-
-  const clearProfile = () => {
-    localStorage.removeItem("lens_handle");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-  };
-
-  const storeProfile = (handle: string, authorization: any) => {
-    localStorage.setItem("lens_handle", handle);
-    localStorage.setItem("access_token", authorization.accessToken);
-    localStorage.setItem("refresh_token", authorization.refreshToken);
-  };
 
   const checkProvider = async () => {};
 

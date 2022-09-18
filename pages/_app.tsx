@@ -1,19 +1,16 @@
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 
-import { useState, createContext, useContext } from "react";
-
-export const UserContext = createContext(null);
+import { useState } from "react";
+import { LensLoginProvider } from "../components/lens-login-provider";
 
 function MyApp({ Component, pageProps }) {
-  const [user, setUser] = useState(null);
-
   return (
-    <UserContext.Provider value={user}>
+    <LensLoginProvider>
       <SessionProvider session={pageProps.session}>
         <Component {...pageProps} />
       </SessionProvider>
-    </UserContext.Provider>
+    </LensLoginProvider>
   );
 }
 

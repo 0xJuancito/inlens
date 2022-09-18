@@ -29,19 +29,22 @@ import AppHead from "../components/app-head";
 import InlensLogoNav from "../components/inlens-logo-nav";
 import TwitterLogin from "../components/twitter-login";
 import { signOut } from "next-auth/react";
-import { UserContext } from "./_app";
 import { clearProfile, loadProfile, storeProfile } from "../lib/user";
+import { LensUserContext } from "../components/lens-login-provider";
 
 export default function Home() {
-  const user = useContext(UserContext);
+  const {
+    loggingInLens,
+    setLoggingInLens,
+    loggedInLens,
+    setLoggedInLens,
+    lensHandle,
+    setLensHandle,
+  } = useContext(LensUserContext);
 
   const [waiting, setWaiting] = useState(false);
 
   const [showLogin, setShowLogin] = useState(false);
-
-  const [loggingInLens, setLoggingInLens] = useState(false);
-  const [loggedInLens, setLoggedInLens] = useState(false);
-  const [lensHandle, setLensHandle] = useState("");
 
   const [frens, setFrens] = useState([]);
   const [inputValue, setInputValue] = useState("");

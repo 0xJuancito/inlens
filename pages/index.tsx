@@ -82,7 +82,7 @@ export default function Home() {
         setLensHandle(handle);
       }
     });
-  }, []);
+  }, [setLoggedInLens, setLensHandle]);
 
   const checkProvider = async () => {};
 

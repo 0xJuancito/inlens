@@ -28,11 +28,13 @@ import Footer from "../components/footer";
 import AppHead from "../components/app-head";
 import InlensLogoNav from "../components/inlens-logo-nav";
 import TwitterLogin from "../components/twitter-login";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { clearProfile, loadProfile, storeProfile } from "../lib/user";
 import { LensUserContext } from "../components/lens-login-provider";
 
 export default function Home() {
+  const { data } = useSession();
+
   const {
     loggingInLens,
     setLoggingInLens,
@@ -278,7 +280,7 @@ export default function Home() {
       if (err instanceof TooManyRequestsError) {
         title = "No slots available";
         message =
-          "Login with Twitter to skip the line or try again in a few minutes ⌛️";
+          "Connect Twitter to skip the line or try again in a few minutes ⌛️";
       }
       if (err instanceof AuthorizationError) {
         title = "Authorization Error";
@@ -507,9 +509,9 @@ export default function Home() {
           </div>
           <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
           {waiting === true ? renderHeart() : ""}
-          {!waiting && !frens?.length ? (
+          {!data?.user && !waiting && !frens?.length ? (
             <div>
-              💡 <span className={styles.tip}>Login with Twitter</span> and skip
+              💡 <span className={styles.tip}>Connect Twitter</span> and skip
               the line!
             </div>
           ) : (

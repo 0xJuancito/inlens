@@ -14,7 +14,7 @@ const TwitterLogin = () => {
   const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    setLoggedInTwitter(!!data?.user);
+    setLoggedInTwitter(Boolean(data?.user));
 
     const queryString = window.location.search;
     if (queryString === "?showlogin=true") {
@@ -41,7 +41,7 @@ const TwitterLogin = () => {
         alt="twitter logo"
       ></Image>
       <span className={styles.twitterLoginText}>
-        {loggedInTwitter ? "Logout" : "Login"}
+        {loggedInTwitter ? "Disconnect" : "Connect"}
       </span>
     </button>
   );

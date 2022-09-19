@@ -1,12 +1,11 @@
 .twitterLogin {
-    background-color: #d3b6ff;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-  }
-  
-  .twitterLoginText {
-    margin-left: 6px;
-  }
+  background-color: #d3b6ff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.twitterLoginText {
+  margin-left: 6px;
+}

@@ -41,7 +41,7 @@ export default async function handler(
   } catch (err) {
     if (!err || err instanceof TooManyRequestsError) {
       res.status(429).json({
-        error: "Login with Twitter or try again in a few minutes ⌛️",
+        error: "Connect Twitter or try again in a few minutes ⌛️",
       });
       return;
     }

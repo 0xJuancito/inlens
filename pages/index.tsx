@@ -44,8 +44,6 @@ export default function Home() {
 
   const [waiting, setWaiting] = useState(false);
 
-  const [showLogin, setShowLogin] = useState(false);
-
   const [frens, setFrens] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
@@ -61,11 +59,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const queryString = window.location.search;
-    if (queryString === "?showlogin=true") {
-      setShowLogin(true);
-    }
-
     const newModal = new Web3Modal({
       // cacheProvider: true,
       providerOptions: {},
@@ -476,7 +469,7 @@ export default function Home() {
         <nav>
           <InlensLogoNav></InlensLogoNav>
           <div className={styles.loginContainer}>
-            {showLogin ? <TwitterLogin></TwitterLogin> : ""}
+            <TwitterLogin></TwitterLogin>
             {loggedInLens ? renderLoggedInLens() : renderLogin()}
           </div>
         </nav>
@@ -514,7 +507,7 @@ export default function Home() {
           </div>
           <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
           {waiting === true ? renderHeart() : ""}
-          {showLogin && !waiting && !frens?.length ? (
+          {!waiting && !frens?.length ? (
             <div>
               💡 <span className={styles.tip}>Login with Twitter</span> and skip
               the line!

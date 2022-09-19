@@ -1,0 +1,52 @@
+.signIn {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  min-width: 100px;
+}
+
+.signIn[disabled] {
+  background-color: rgba(171, 254, 44, 0.6);
+}
+
+.logout {
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 0.25rem;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.logout:hover {
+  background-color: #fafafa;
+}
+
+.ldsring {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  scale: 25%;
+  margin-bottom: 12px;
+  margin-left: -6px;
+  margin-right: 6px;
+}
+.ldsring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #212322;
+  border-color: #212322 transparent #212322 transparent;
+  animation: ldsring 1.2s linear infinite;
+}
+@keyframes ldsring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

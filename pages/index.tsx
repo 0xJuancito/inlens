@@ -2,15 +2,8 @@
 import Image from "next/image";
 import { useRef, useState, useEffect, SetStateAction, useContext } from "react";
 import styles from "../styles/Home.module.css";
-import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import { login } from "../lib/login";
-import { getDefaultProfile } from "../lib/get-default-profile";
-import { setAuthenticationToken } from "../lib/state";
 import jwt from "jsonwebtoken";
-import { setAddress, setSigner } from "../lib/ethers.service";
-import { refresh } from "../lib/refresh";
-import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
 import {
   AuthorizationError,
   findFrens,
@@ -21,38 +14,28 @@ import { freeFollow } from "../lib/follow";
 import { ReactNotifications } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Store } from "react-notifications-component";
-import { profiles } from "../lib/get-profiles";
 
-import ClaimPopup from "../components/popup";
 import Footer from "../components/footer";
 import AppHead from "../components/app-head";
 import InlensLogoNav from "../components/inlens-logo-nav";
 import TwitterLogin from "../components/twitter-login";
 import { signOut, useSession } from "next-auth/react";
-import { clearProfile, loadProfile, storeProfile } from "../lib/user";
+import LensLogin from "../components/lens-login";
 import { LensUserContext } from "../components/lens-login-provider";
+import { getAddressFromSigner } from "../lib/ethers.service";
+import { LensFriendsContext } from "../components/lens-friends-provider";
 
 export default function Home() {
   const { data } = useSession();
 
-  const {
-    loggingInLens,
-    setLoggingInLens,
-    loggedInLens,
-    setLoggedInLens,
-    lensHandle,
-    setLensHandle,
-  } = useContext(LensUserContext);
+  const { connect } = useContext(LensUserContext);
+  const { frens, setFrens } = useContext(LensFriendsContext);
 
   const [waiting, setWaiting] = useState(false);
 
-  const [frens, setFrens] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
-  const [instance, setInstance] = useState<any>();
 
   const twitterInput = useRef(null);
-  const claimPopup = useRef(null);
 
   const onChangeHandler = (event: {
     target: { value: SetStateAction<string> };
@@ -61,23 +44,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const newModal = new Web3Modal({
-      // cacheProvider: true,
-      providerOptions: {},
-      network: "matic",
-    });
-    setWeb3Modal(newModal);
     if (twitterInput.current) twitterInput.current.focus();
   }, []);
-
-  useEffect(() => {
-    loadProfile().then((handle) => {
-      if (handle) {
-        setLoggedInLens(true);
-        setLensHandle(handle);
-      }
-    });
-  }, [setLoggedInLens, setLensHandle]);
 
   const checkProvider = async () => {};
 
@@ -111,6 +79,18 @@ export default function Home() {
       if (!connected) {
         throw new Error("Sign in failed");
       }
+
+      try {
+        const address = getAddressFromSigner();
+        if (frens.length) {
+          const newFrens = [...frens];
+          await modifyFollows(address, newFrens);
+          setFrens(newFrens);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
       const newFrensConnect = [...frens];
       const frenConnect = newFrensConnect.find((fren) => fren.lens.id === id);
       frenConnect.lens.follows = true;
@@ -153,86 +133,6 @@ export default function Home() {
           },
         });
       }
-    }
-  };
-
-  const connect = async (): Promise<boolean> => {
-    if (!window.ethereum) {
-      Store.addNotification({
-        title: "No wallet found",
-        message: "Please install a wallet to use the app",
-        type: "danger",
-        insert: "bottom",
-        container: "bottom-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-        },
-      });
-      return false;
-    }
-
-    if (loggingInLens) {
-      return false;
-    }
-    if (loggedInLens) {
-      return true;
-    }
-    try {
-      setLoggingInLens(true);
-      const newInstance = await web3Modal.connect();
-      setInstance(newInstance);
-
-      const provider = new ethers.providers.Web3Provider(newInstance);
-      const signer = provider.getSigner();
-      setSigner(signer);
-
-      const address = await signer.getAddress();
-      const accessToken = await login(address);
-
-      const response = await getDefaultProfile();
-      let defaultProfile = response?.defaultProfile?.handle;
-
-      if (!defaultProfile) {
-        const profilesResponse = await profiles({
-          ownedBy: address,
-        });
-
-        defaultProfile =
-          profilesResponse?.profiles?.items &&
-          profilesResponse?.profiles?.items[0]?.handle;
-      }
-
-      if (!defaultProfile) {
-        claimPopup.current.open();
-        setLoggingInLens(false);
-        setAuthenticationToken(null);
-        return;
-      }
-
-      try {
-        if (frens.length) {
-          const newFrens = [...frens];
-          await modifyFollows(address, newFrens);
-          setFrens(newFrens);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-
-      storeProfile(defaultProfile, accessToken.authenticate);
-
-      setLensHandle(defaultProfile);
-      setLoggedInLens(true);
-      setLoggingInLens(false);
-
-      return true;
-    } catch (error) {
-      console.error(error);
-      setLoggingInLens(false);
-      return false;
     }
   };
 
@@ -399,70 +299,6 @@ export default function Home() {
     );
   };
 
-  const renderLoading = () => {
-    if (!loggingInLens) {
-      return "";
-    }
-    return (
-      <span className={styles.ldsring}>
-        <div></div>
-      </span>
-    );
-  };
-
-  const renderLoginImage = () => {
-    if (loggingInLens) {
-      return "";
-    }
-    return (
-      <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
-    );
-  };
-
-  const renderLogin = () => {
-    return (
-      <button
-        className={styles.signIn}
-        onClick={() => connect()}
-        disabled={loggingInLens}
-      >
-        {renderLoginImage()}
-        {renderLoading()}
-        <span>Login</span>
-      </button>
-    );
-  };
-
-  const logout = async () => {
-    setLoggedInLens(false);
-    setAddress(null);
-    setAuthenticationToken(null);
-    clearProfile();
-  };
-
-  const renderLoggedInLens = () => {
-    return (
-      <Menu
-        align="end"
-        menuButton={
-          <MenuButton className={styles.signIn}>
-            <Image
-              height="40"
-              width="40"
-              src="/lens.svg"
-              alt="Lens Logo"
-            ></Image>
-            <span>{lensHandle}</span>
-          </MenuButton>
-        }
-      >
-        <MenuItem className={styles.logout} onClick={() => logout()}>
-          Logout
-        </MenuItem>
-      </Menu>
-    );
-  };
-
   return (
     <div>
       <AppHead></AppHead>
@@ -472,7 +308,7 @@ export default function Home() {
           <InlensLogoNav></InlensLogoNav>
           <div className={styles.loginContainer}>
             <TwitterLogin></TwitterLogin>
-            {loggedInLens ? renderLoggedInLens() : renderLogin()}
+            <LensLogin></LensLogin>
           </div>
         </nav>
       </header>
@@ -523,7 +359,6 @@ export default function Home() {
 
         <Footer></Footer>
       </div>
-      <ClaimPopup ref={claimPopup}></ClaimPopup>
     </div>
   );
 }

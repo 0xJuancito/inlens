@@ -161,7 +161,7 @@ export default function Home() {
         setFrens(newFrens);
       } else {
         Store.addNotification({
-          title: "No friend was found :(",
+          title: "No friend were found for this profile in Lens",
           type: "danger",
           insert: "bottom",
           container: "bottom-right",

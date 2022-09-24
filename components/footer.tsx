@@ -11,7 +11,7 @@ const Footer = () => {
       </a>
       &nbsp; | &nbsp;
       <a
-        href="https://github.com/juanscolari/who-is-in-lens"
+        href="https://github.com/0xJuancito/who-is-in-lens-web"
         target={"_blank"}
         rel={"noreferrer"}
       >

@@ -1,4 +1,4 @@
-# who-is-in-lens
+# Inlens
 
 Find your friends from Twitter in [Lens Protocol](https://lens.xyz/) 🌿
 

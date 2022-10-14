@@ -212,6 +212,7 @@
 
 .profileDescription {
   margin-top: 5px;
+  overflow-wrap: anywhere;
 }
 
 .userCard img {

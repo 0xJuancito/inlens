@@ -345,14 +345,14 @@ export default function Home() {
           </div>
           <div>{waiting === true ? "It takes up to 10 seconds ⌛️" : ""}</div>
           {waiting === true ? renderHeart() : ""}
-          {!data?.user && !waiting && !frens?.length ? (
+          {/* {!data?.user && !waiting && !frens?.length ? (
             <div>
               💡 <span className={styles.tip}>Connect Twitter</span> and skip
               the line!
             </div>
           ) : (
             ""
-          )}
+          )} */}
 
           <div>{!waiting && frensList()}</div>
         </main>

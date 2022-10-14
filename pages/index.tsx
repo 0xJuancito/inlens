@@ -91,10 +91,11 @@ export default function Home() {
         console.error(err);
       }
 
-      const newFrensConnect = [...frens];
-      const frenConnect = newFrensConnect.find((fren) => fren.lens.id === id);
-      frenConnect.lens.follows = true;
-      setFrens(newFrensConnect);
+      // Update state in an optimistic way but causes a bug: https://github.com/0xJuancito/inlens/issues/31
+      // const newFrensConnect = [...frens];
+      // const frenConnect = newFrensConnect.find((fren) => fren.lens.id === id);
+      // frenConnect.lens.follows = true;
+      // setFrens(newFrensConnect);
 
       await freeFollow(id);
 

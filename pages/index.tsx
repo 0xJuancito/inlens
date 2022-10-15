@@ -80,22 +80,10 @@ export default function Home() {
         throw new Error("Sign in failed");
       }
 
-      try {
-        const address = getAddressFromSigner();
-        if (frens.length) {
-          const newFrens = [...frens];
-          await modifyFollows(address, newFrens);
-          setFrens(newFrens);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-
-      // Update state in an optimistic way but causes a bug: https://github.com/0xJuancito/inlens/issues/31
-      // const newFrensConnect = [...frens];
-      // const frenConnect = newFrensConnect.find((fren) => fren.lens.id === id);
-      // frenConnect.lens.follows = true;
-      // setFrens(newFrensConnect);
+      const newFrensConnect = [...frens];
+      const frenConnect = newFrensConnect.find((fren) => fren.lens.id === id);
+      frenConnect.lens.follows = true;
+      setFrens(newFrensConnect);
 
       await freeFollow(id);
 

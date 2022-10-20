@@ -213,6 +213,7 @@ export default function Home() {
             onClick={() => followRequest(fren.lens.id)}
           >
             <Image
+              unoptimized
               height="40"
               width="40"
               src="/lens.svg"
@@ -234,6 +235,7 @@ export default function Home() {
             <li className={styles.userCard} key={fren.twitter.handle}>
               <div className={styles.avatarContainer}>
                 <Image
+                  unoptimized
                   height="48"
                   width="48"
                   src={fren.twitter.avatar || defaultAvatar}

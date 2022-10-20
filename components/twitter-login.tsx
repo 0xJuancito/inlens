@@ -35,6 +35,7 @@ const TwitterLogin = () => {
       }}
     >
       <Image
+        unoptimized
         height="18"
         width="18"
         src="/twitter.svg"

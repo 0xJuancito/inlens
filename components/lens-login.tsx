@@ -32,7 +32,13 @@ const LensLogin = () => {
       return "";
     }
     return (
-      <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
+      <Image
+        unoptimized
+        height="40"
+        width="40"
+        src="/lens.svg"
+        alt="Lens Logo"
+      ></Image>
     );
   };
 
@@ -75,6 +81,7 @@ const LensLogin = () => {
         menuButton={
           <MenuButton className={styles.signIn}>
             <Image
+              unoptimized
               height="40"
               width="40"
               src="/lens.svg"

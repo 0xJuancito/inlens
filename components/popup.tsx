@@ -20,13 +20,20 @@ const ClaimPopup = (props, ref) => {
           &times;
         </button>
         <div className={styles.header}>
-          <Image height="40" width="40" src="/lens.svg" alt="Lens Logo"></Image>
+          <Image
+            unoptimized
+            height="40"
+            width="40"
+            src="/lens.svg"
+            alt="Lens Logo"
+          ></Image>
           Login
         </div>
         <div className={styles.content}>
           <h2>Claim your Lens profile 🌿</h2>
           <div className={styles.claimContainer}>
             <Image
+              unoptimized
               height="64"
               width="64"
               src="/lens.png"

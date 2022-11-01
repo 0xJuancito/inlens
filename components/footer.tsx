@@ -6,7 +6,7 @@ const Footer = () => {
       <span role="img" aria-label="sheep">
         Built with 🌿 by
       </span>
-      <a href="https://www.lensfrens.xyz/juancito.lens" target="blank">
+      <a href="https://lenster.xyz/u/juancito.lens" target="blank">
         juancito.lens
       </a>
       &nbsp; | &nbsp;

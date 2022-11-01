@@ -201,7 +201,7 @@ export default function Home() {
 
     const twitterUrl = (handle: string) => `https://twitter.com/${handle}`;
     const lensUrl = (handle: string) =>
-      `https://lensfrens.xyz/${handle.toLowerCase()}`;
+      `https://lenster.xyz/u/${handle.toLowerCase()}`;
 
     const renderFollowing = (fren) => {
       if (fren.lens?.follows) {

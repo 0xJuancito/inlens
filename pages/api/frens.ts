@@ -3,6 +3,12 @@ import { findFriends } from "who-is-in-lens";
 import rateLimit from "../../utils/rate-limit";
 import { getToken } from "next-auth/jwt";
 import { TooManyRequestsError } from "who-is-in-lens";
+import Cache from "lru-cache";
+
+const responseCache = new Cache({
+  max: 100,
+  ttl: 1000 * 60 * 60, // 1hour
+});
 
 const limiter = rateLimit({
   interval: 60 * 1000 * 15, // 15 minutes
@@ -32,11 +38,24 @@ export default async function handler(
     res.status(400).json({ error: "No username was provided" });
   }
 
+  const cacheKey = `twitter-${username}`;
+  if (responseCache.has(cacheKey)) {
+    try {
+      res.setHeader("x-cache", "HIT");
+      const response = JSON.parse(responseCache.get(cacheKey));
+      res.status(200).json(response as any);
+      return;
+    } catch (err) {}
+  }
+
   try {
     if (!accessToken) {
       await limiter.check(res, 50, "CACHE_TOKEN"); // 50 requests per 15 minutes
     }
     const frens = await findFriends(username, accessToken);
+    if (frens.length) {
+      responseCache.set(cacheKey, JSON.stringify(frens));
+    }
     res.status(200).json(frens);
   } catch (err) {
     if (!err || err instanceof TooManyRequestsError) {

@@ -1,15 +1,17 @@
 .footer {
-    display: flex;
-    flex: 1;
-    padding: 2rem 0;
-    border-top: 1px solid #eaeaea;
-    justify-content: center;
-    align-items: center;
-    max-height: 86px;
-  }
-  
-  .footer a {
-    margin-left: 3px;
-    font-weight: 800;
-    text-decoration: underline;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+  padding: 2rem 0;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+  max-height: 86px;
+}
+
+.footer a {
+  margin-left: 3px;
+  font-weight: 800;
+  text-decoration: underline;
+}

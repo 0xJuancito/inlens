@@ -214,12 +214,12 @@ export default function Home() {
           >
             <Image
               unoptimized
-              height="40"
-              width="40"
+              height="38"
+              width="38"
               src="/lens.svg"
               alt="Lens Logo"
             ></Image>
-            {"Follow"}
+            <span className={styles.followText}>{"Follow"}</span>
           </button>
         );
       }

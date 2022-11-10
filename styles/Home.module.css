@@ -119,16 +119,36 @@
   margin-bottom: 1.5rem;
 }
 
-.follow {
+.profileContainer button.follow {
   min-width: 100px;
   padding: 10px;
   display: flex;
   align-items: center;
-  padding-left: 3px;
+  justify-content: center;
+  padding-left: 0;
+  border-radius: 15px;
+  height: 34px;
+}
+
+.followText {
+  margin-left: -3px;
 }
 
 .following {
   min-width: 100px;
+  background: #fff;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(217, 217, 222);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+}
+
+.following:hover {
+  box-shadow: none;
+  cursor: inherit;
 }
 
 .twitterInputAt {

@@ -11,6 +11,7 @@ import ClaimPopup from "../components/popup";
 import { storeProfile } from "../lib/user";
 import { modifyFollows } from "../lib/find-frens";
 import { LensFriendsContext } from "./lens-friends-provider";
+import { sortFrens } from "../lib/frens";
 
 const LensUserContext = createContext(null);
 
@@ -93,8 +94,9 @@ const LensLoginProvider = ({ children }) => {
 
       try {
         if (frens.length) {
-          const newFrens = [...frens];
+          let newFrens = sortFrens([...frens]);
           await modifyFollows(address, newFrens);
+          newFrens = sortFrens(newFrens);
           setFrens(newFrens);
         }
       } catch (err) {

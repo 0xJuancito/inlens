@@ -1,5 +1,6 @@
 import { profiles } from "../lib/get-profiles";
 import { doesFollow } from "../lib/does-follow";
+import { sortFrens } from "./frens";
 
 type ApiFren = {
   twitter: {
@@ -119,18 +120,9 @@ export const findFrens = async (
     await modifyFollows(address, newFrens);
   }
 
-  const sortAlphabetically = (a, b) =>
-    a.twitter.handle.localeCompare(b.twitter.handle);
-
   const allFrens = newFrens.filter((fren) => fren.lens.id);
-  const followingFrens = allFrens
-    .filter((fren) => fren.lens.follows)
-    .sort(sortAlphabetically);
-  const notFollowingFrens = allFrens
-    .filter((fren) => !fren.lens.follows)
-    .sort(sortAlphabetically);
 
-  return notFollowingFrens.concat(followingFrens);
+  return sortFrens(allFrens);
 };
 
 const sliceIntoChunks = (arr, chunkSize) => {

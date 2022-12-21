@@ -2,6 +2,7 @@ import { gql } from "@apollo/client/core";
 import { apolloClient } from "./apollo-client";
 import { login } from "./login";
 import { getAddressFromSigner } from "./ethers.service";
+import { prettyJSON } from "./helpers";
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {

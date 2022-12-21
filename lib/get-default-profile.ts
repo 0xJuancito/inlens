@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client/core";
 import { apolloClient } from "./apollo-client";
 import { getAddressFromSigner } from "./ethers.service";
+import { prettyJSON } from "./helpers";
 
 const GET_DEFAULT_PROFILES = `
   query($request: DefaultProfileRequest!) {

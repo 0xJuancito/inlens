@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client/core";
 import { apolloClient } from "./apollo-client";
-import { prettyJSON } from "./helpers";
 
 const DOES_FOLLOW = `
   query($request: DoesFollowRequest!) {
@@ -32,7 +31,6 @@ export const doesFollow = async (address: string, profileIds: string[]) => {
   }));
 
   const result = await doesFollowRequest(followInfos);
-  //   prettyJSON("does follow: result", result.data);
 
   return result.data;
 };

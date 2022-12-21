@@ -1,8 +1,6 @@
 import { gql } from "@apollo/client/core";
 import { apolloClient } from "./apollo-client";
 import { getAddressFromSigner } from "./ethers.service";
-import { prettyJSON } from "./helpers";
-import { login } from "./login";
 
 const REFRESH_AUTHENTICATION = `
   mutation($request: RefreshRequest!) { 
@@ -36,7 +34,6 @@ export const refresh = async (
     refreshToken
     // accessTokens.authenticate.refreshToken
   );
-  prettyJSON("refresh: result", newAccessToken.data);
 
   return newAccessToken.data.refresh;
 };

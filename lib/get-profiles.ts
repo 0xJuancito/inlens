@@ -2,7 +2,6 @@ import { gql } from "@apollo/client/core";
 import { apolloClient } from "./apollo-client";
 import { login } from "./login";
 import { getAddressFromSigner } from "./ethers.service";
-import { prettyJSON } from "./helpers";
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {
@@ -59,8 +58,6 @@ export const profiles = async (request?: ProfilesRequest) => {
   // only showing one example to query but you can see from request
   // above you can query many
   const profilesFromProfileIds = await getProfilesRequest(request);
-
-  //   prettyJSON("profiles: result", profilesFromProfileIds.data);
 
   return profilesFromProfileIds.data;
 };

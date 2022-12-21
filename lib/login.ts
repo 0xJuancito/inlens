@@ -1,8 +1,6 @@
 import { gql } from "@apollo/client/core";
-import { ethers, Wallet } from "ethers";
 import { apolloClient } from "./apollo-client";
-import { setSigner, signText } from "./ethers.service";
-import { getDefaultProfile } from "./get-default-profile";
+import { signText } from "./ethers.service";
 import { getAuthenticationToken, setAuthenticationToken } from "./state";
 
 const GET_CHALLENGE = `

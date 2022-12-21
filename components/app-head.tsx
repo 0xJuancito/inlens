@@ -27,7 +27,7 @@ const AppHead = () => {
         property="og:description"
         content="​Find your friends from Twitter in Lens Protocol"
       />
-      <meta property="og:image" content="https://inlens.xyz/inlens.png" />
+      <meta property="og:image" content="https://inlens.xyz/og.png" />
 
       {/* <!-- Twitter --> */}
       <meta property="twitter:card" content="summary_large_image" />
@@ -37,7 +37,7 @@ const AppHead = () => {
         property="twitter:description"
         content="​Find your friends from Twitter in Lens Protocol"
       />
-      <meta property="twitter:image" content="https://inlens.xyz/inlens.png" />
+      <meta property="twitter:image" content="https://inlens.xyz/og.png" />
       <link
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&amp;display=swap"
         rel="preload"

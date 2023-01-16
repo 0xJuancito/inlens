@@ -42,6 +42,12 @@ const AppHead = () => {
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&amp;display=swap"
         rel="preload"
       ></link>
+
+      <script
+        defer
+        data-domain="inlens.xyz,lensverse.web"
+        src="https://plausible.io/js/script.js"
+      ></script>
     </Head>
   );
 };

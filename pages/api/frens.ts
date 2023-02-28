@@ -42,7 +42,7 @@ export default async function handler(
   if (responseCache.has(cacheKey)) {
     try {
       res.setHeader("x-cache", "HIT");
-      const response = JSON.parse(responseCache.get(cacheKey));
+      const response = JSON.parse(responseCache.get(cacheKey) as string);
       res.status(200).json(response as any);
       return;
     } catch (err) {}

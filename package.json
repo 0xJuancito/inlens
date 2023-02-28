@@ -7,6 +7,9 @@
     "lint": "next lint",
     "postinstall": "patch-package"
   },
+  "engines": {
+    "node": ">=16.0.0 <18.0.0"
+  },
   "dependencies": {
     "@apollo/client": "^3.6.9",
     "@szhsin/react-menu": "^3.1.2",

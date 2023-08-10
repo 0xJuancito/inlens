@@ -73,7 +73,7 @@ export default async function handler(
     }
 
     res.status(404).json({
-      error: "There are no Lens frens for that profile",
+      error: "The Twitter API request failed",
     });
   }
 }
